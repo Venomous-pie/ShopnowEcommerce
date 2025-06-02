@@ -146,28 +146,6 @@ ShopnowEcommerce/
 
 ---
 
-## Contributing
-- Follow PEP8 and company coding standards for Python code.
-- Use clear, descriptive commit messages.
-- Create feature branches for new work.
-- Before pushing any changes, create a new branch with one of the following naming conventions based on your work:
-  - `feature/<short-description>` for new features
-  - `bugfix/<short-description>` for bug fixes
-  - `testing/<short-description>` for testing or QA
-  - `updates/<short-description>` for updates or maintenance
-  Example:
-  ```powershell
-  git checkout -b feature/user-authentication
-  git checkout -b bugfix/fix-login-error
-  git checkout -b testing/integration-tests
-  git checkout -b updates/dependency-bump
-  ```
-- Submit pull requests for review before merging.
-- After your changes are merged, delete your feature, bugfix, or testing branch to keep the repository clean (or as appropriate for your workflow).
-- Document new features and changes in this README or a dedicated CHANGELOG.
-
----
-
 ## Branching Strategy
 
 This repository uses a branch-based workflow to support parallel development and maintain code quality. Below are the main branches and their purposes:
@@ -176,6 +154,7 @@ This repository uses a branch-based workflow to support parallel development and
 - **addfeature**: Used for developing new features. Each new feature should be developed in its own branch off of `main` or the latest stable branch, then merged via pull request.
 - **bugfixes**: Dedicated to addressing and resolving bugs. Hotfixes and patches should be committed here and merged into `main` after review.
 - **testing**: Used for integration and system testing. Experimental changes and QA processes are performed here before merging into `main`.
+- **updates**: Used for general updates, refactoring, or improvements that do not fall under features, bugfixes, or testing. Merge into `main` after review.
 
 > **Note:** Always create descriptive feature or bugfix branches for specific tasks (e.g., `feature/user-auth`, `bugfix/cart-total`).
 
