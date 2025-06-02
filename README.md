@@ -186,4 +186,4 @@ For questions, onboarding, or support, contact the project maintainer or your te
 
 ---
 
-Thank you for contributing to ShopnowEcommerce!
+Thank you for contributing to ShopnowEcommerce!!
