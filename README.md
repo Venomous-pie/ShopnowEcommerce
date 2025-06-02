@@ -154,11 +154,13 @@ ShopnowEcommerce/
   - `feature/<short-description>` for new features
   - `bugfix/<short-description>` for bug fixes
   - `testing/<short-description>` for testing or QA
+  - `updates/<short-description>` for updates or maintenance
   Example:
   ```powershell
   git checkout -b feature/user-authentication
   git checkout -b bugfix/fix-login-error
   git checkout -b testing/integration-tests
+  git checkout -b updates/dependency-bump
   ```
 - Submit pull requests for review before merging.
 - After your changes are merged, delete your feature, bugfix, or testing branch to keep the repository clean (or as appropriate for your workflow).
