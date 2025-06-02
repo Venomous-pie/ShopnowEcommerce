@@ -1,13 +1,6 @@
 <template>
-  <div id="app">
-    <h1>Vue + Vite Frontend</h1>
-    <HelloDjango />
-  </div>
+  <router-view />
 </template>
-
-<script setup>
-import HelloDjango from './components/HelloWorld.vue'
-</script>
 
 <style>
 /* optional styling */
