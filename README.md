@@ -133,6 +133,11 @@ ShopnowEcommerce/
 │   └── backend/     # Django project settings
 ├── frontend/        # Vue 3 + Vite frontend
 │   ├── src/
+│   │   ├── App.vue         # Main Vue app entry
+│   │   ├── main.js         # JS entry point
+│   │   ├── style.css       # Global styles
+│   │   ├── assets/         # Static assets
+│   │   └── components/     # Vue components (e.g., HelloWorld.vue)
 │   ├── public/
 │   └── ...
 ├── requirements.txt # Python dependencies
