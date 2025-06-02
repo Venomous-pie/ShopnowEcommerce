@@ -1,0 +1,33 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-added-large-files
+      - id: check-yaml
+      - id: debug-statements
+
+  - repo: https://github.com/psf/black
+    rev: 25.1.0
+    hooks:
+      - id: black
+        language_version: python3
+
+  - repo: https://github.com/pre-commit/mirrors-eslint
+    rev: v9.28.0
+    hooks:
+      - id: eslint
+        additional_dependencies: ["eslint", "eslint-plugin-vue"]
+        entry: npx eslint --config frontend/eslint.config.js
+        types_or: [javascript, vue]
+        files: ^frontend/
+
+  - repo: local
+    hooks:
+      - id: autoflake
+        name: Remove unused Python imports
+        entry: autoflake --remove-all-unused-imports --in-place
+        language: system
+        types: [python]
+        args: ["-r", "backend/"]
