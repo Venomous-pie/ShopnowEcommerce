@@ -1,9 +1,14 @@
+<script setup>
+  import Navbar from './Navbar.vue';
+  import Footer from './Footer.vue';
+</script>
+
 <template>
   <div>
-    <header><!-- ...your header... --></header>
+    <Navbar />
     <main>
       <router-view />
     </main>
-    <footer><!-- ...your footer... --></footer>
+    <Footer />
   </div>
 </template>

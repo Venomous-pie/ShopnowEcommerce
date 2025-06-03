@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Layout from './components/Layout.vue'
-import HomePage from './components/homepage.vue'
-import ProductPage from './components/ProductPage.vue'
+import HomePage from './pages/Homepage.vue'
 
 const routes = [
   {
@@ -9,7 +8,7 @@ const routes = [
     component: Layout,
     children: [
       { path: '', component: HomePage },
-      { path: 'product/:id', component: ProductPage, props: true }
+      { path: 'about', component: () => import('./pages/About.vue') },
     ]
   }
 ]
