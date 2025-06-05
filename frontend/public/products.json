@@ -1,0 +1,740 @@
+[
+  {
+    "sku": "PH-1001-RED",
+    "name": "Wireless Headphones",
+    "description": "Experience high-fidelity sound with these wireless headphones, perfect for music lovers and professionals alike.",
+    "short_description": "Premium wireless headphones with noise cancellation.",
+    "cost": 1200,
+    "price": 1999,
+    "sale_price": 1799,
+    "stock": 34,
+    "stock_status": "in_stock",
+    "image": "https://placehold.co/600x400",
+    "category": "Electronics",
+    "tags": [
+      "audio",
+      "wireless",
+      "headphones"
+    ],
+    "brand": "SoundMax",
+    "model_number": "SMX-WH2024",
+    "variant_attributes": {
+      "color": "Red"
+    },
+    "variant_price_override": 1799,
+    "variant_sku": "PH-1001-RED",
+    "weight": "0.25kg",
+    "dimensions": "20x18x8cm",
+    "free_shipping": true,
+    "ship_from": "Quezon City, Metro Manila",
+    "rating": 4.5,
+    "review_count": 87,
+    "review_details": [
+      {
+        "user": "Juan D.",
+        "rating": 5,
+        "comment": "Great sound quality and battery life!"
+      },
+      {
+        "user": "Maria S.",
+        "rating": 4,
+        "comment": "Very comfortable, but a bit pricey."
+      }
+    ],
+    "country_of_origin": "Philippines",
+    "province_of_origin": "Laguna",
+    "hazardous_material": false,
+    "hazardous_regulations": "",
+    "age_restrictions": "None"
+  },
+  {
+    "sku": "PH-2002-BLK",
+    "name": "Stainless Steel Water Bottle",
+    "description": "Keep your drinks hot or cold for hours with this eco-friendly stainless steel bottle.",
+    "short_description": "Insulated stainless steel bottle, 750ml.",
+    "cost": 250,
+    "price": 499,
+    "sale_price": 399,
+    "stock": 120,
+    "stock_status": "in_stock",
+    "image": "https://placehold.co/600x400",
+    "category": "Home & Kitchen",
+    "tags": [
+      "bottle",
+      "eco-friendly",
+      "kitchen"
+    ],
+    "brand": "HydroMate",
+    "model_number": "HM-SSB750",
+    "variant_attributes": {
+      "color": "Black"
+    },
+    "variant_price_override": 399,
+    "variant_sku": "PH-2002-BLK",
+    "weight": "0.35kg",
+    "dimensions": "28x7x7cm",
+    "free_shipping": false,
+    "ship_from": "Cebu City, Cebu",
+    "rating": 4.8,
+    "review_count": 45,
+    "review_details": [
+      {
+        "user": "Liza M.",
+        "rating": 5,
+        "comment": "Perfect for my daily commute!"
+      }
+    ],
+    "country_of_origin": "Philippines",
+    "province_of_origin": "Cebu",
+    "hazardous_material": false,
+    "hazardous_regulations": "",
+    "age_restrictions": "None"
+  },
+  {
+    "sku": "PH-3003-BLU",
+    "name": "Men's Running Shoes",
+    "description": "Lightweight and durable running shoes designed for comfort and performance.",
+    "short_description": "Breathable running shoes for men.",
+    "cost": 900,
+    "price": 1599,
+    "sale_price": 1399,
+    "stock": 20,
+    "stock_status": "low_stock",
+    "image": "https://placehold.co/600x400",
+    "category": "Sportswear",
+    "tags": [
+      "shoes",
+      "running",
+      "men"
+    ],
+    "brand": "RunFast",
+    "model_number": "RF-MRS2024",
+    "variant_attributes": {
+      "size": "42",
+      "color": "Blue"
+    },
+    "variant_price_override": 1399,
+    "variant_sku": "PH-3003-BLU-42",
+    "weight": "0.7kg",
+    "dimensions": "32x20x12cm",
+    "free_shipping": true,
+    "ship_from": "Davao City, Davao del Sur",
+    "rating": 4.2,
+    "review_count": 32,
+    "review_details": [
+      {
+        "user": "Mark A.",
+        "rating": 4,
+        "comment": "Very comfortable for jogging."
+      }
+    ],
+    "country_of_origin": "Philippines",
+    "province_of_origin": "Davao del Sur",
+    "hazardous_material": false,
+    "hazardous_regulations": "",
+    "age_restrictions": "None"
+  },
+  {
+    "sku": "PH-4004-GRN",
+    "name": "Organic Moringa Capsules",
+    "description": "Boost your health with 100% organic moringa capsules, rich in vitamins and minerals.",
+    "short_description": "Natural moringa supplement, 60 capsules.",
+    "cost": 180,
+    "price": 350,
+    "sale_price": 299,
+    "stock": 75,
+    "stock_status": "in_stock",
+    "image": "https://placehold.co/600x400",
+    "category": "Health & Wellness",
+    "tags": [
+      "moringa",
+      "organic",
+      "supplement"
+    ],
+    "brand": "Nature's Best",
+    "model_number": "",
+    "variant_attributes": {
+      "capsule_count": 60
+    },
+    "variant_price_override": 299,
+    "variant_sku": "PH-4004-GRN-60",
+    "weight": "0.1kg",
+    "dimensions": "10x5x5cm",
+    "free_shipping": false,
+    "ship_from": "Iloilo City, Iloilo",
+    "rating": 4.9,
+    "review_count": 120,
+    "review_details": [
+      {
+        "user": "Ana P.",
+        "rating": 5,
+        "comment": "Felt more energetic after a week!"
+      }
+    ],
+    "country_of_origin": "Philippines",
+    "province_of_origin": "Iloilo",
+    "hazardous_material": false,
+    "hazardous_regulations": "",
+    "age_restrictions": "18+"
+  },
+  {
+    "sku": "PH-5005-WHT",
+    "name": "LED Desk Lamp",
+    "description": "Modern LED desk lamp with adjustable brightness and USB charging port.",
+    "short_description": "Energy-saving LED lamp for study or work.",
+    "cost": 350,
+    "price": 699,
+    "sale_price": 599,
+    "stock": 50,
+    "stock_status": "in_stock",
+    "image": "https://placehold.co/600x400",
+    "category": "Office Supplies",
+    "tags": [
+      "lamp",
+      "LED",
+      "desk"
+    ],
+    "brand": "BrightLite",
+    "model_number": "BL-DL2024",
+    "variant_attributes": {
+      "color": "White"
+    },
+    "variant_price_override": 599,
+    "variant_sku": "PH-5005-WHT",
+    "weight": "0.5kg",
+    "dimensions": "35x12x10cm",
+    "free_shipping": true,
+    "ship_from": "Makati, Metro Manila",
+    "rating": 4.7,
+    "review_count": 60,
+    "review_details": [
+      {
+        "user": "Carlos G.",
+        "rating": 5,
+        "comment": "Very bright and easy to use."
+      }
+    ],
+    "country_of_origin": "Philippines",
+    "province_of_origin": "Metro Manila",
+    "hazardous_material": false,
+    "hazardous_regulations": "",
+    "age_restrictions": "None"
+  },
+  {
+    "sku": "PH-6006-RED",
+    "name": "Children's Art Set",
+    "description": "Complete art set for kids with crayons, markers, colored pencils, and more.",
+    "short_description": "120-piece art set for children.",
+    "cost": 400,
+    "price": 899,
+    "sale_price": 799,
+    "stock": 15,
+    "stock_status": "low_stock",
+    "image": "https://placehold.co/600x400",
+    "category": "Toys & Games",
+    "tags": [
+      "art",
+      "kids",
+      "creative"
+    ],
+    "brand": "ArtJoy",
+    "model_number": "AJ-ART120",
+    "variant_attributes": {
+      "color": "Red Case"
+    },
+    "variant_price_override": 799,
+    "variant_sku": "PH-6006-RED",
+    "weight": "1.2kg",
+    "dimensions": "40x25x5cm",
+    "free_shipping": false,
+    "ship_from": "Baguio City, Benguet",
+    "rating": 4.6,
+    "review_count": 22,
+    "review_details": [
+      {
+        "user": "Ella F.",
+        "rating": 5,
+        "comment": "My kids love it! Great variety."
+      }
+    ],
+    "country_of_origin": "Philippines",
+    "province_of_origin": "Benguet",
+    "hazardous_material": false,
+    "hazardous_regulations": "",
+    "age_restrictions": "3+"
+  },
+  {
+    "sku": "PH-7001-BLU",
+    "name": "Stainless Steel Water Bottle",
+    "description": "Insulated water bottle keeps drinks cold for 24 hours and hot for 12 hours.",
+    "short_description": "500ml insulated water bottle.",
+    "cost": 200,
+    "price": 499,
+    "sale_price": 449,
+    "stock": 50,
+    "stock_status": "in_stock",
+    "image": "https://placehold.co/600x400",
+    "category": "Home & Kitchen",
+    "tags": [
+      "water bottle",
+      "insulated",
+      "kitchen"
+    ],
+    "brand": "HydroMate",
+    "model_number": "HM-500BLU",
+    "variant_attributes": {
+      "color": "Blue"
+    },
+    "variant_price_override": 449,
+    "variant_sku": "PH-7001-BLU",
+    "weight": "0.3kg",
+    "dimensions": "25x7x7cm",
+    "free_shipping": true,
+    "ship_from": "Quezon City, Metro Manila",
+    "rating": 4.8,
+    "review_count": 35,
+    "review_details": [
+      {
+        "user": "Mia S.",
+        "rating": 5,
+        "comment": "Keeps my drinks cold all day!"
+      }
+    ],
+    "country_of_origin": "Philippines",
+    "province_of_origin": "Metro Manila",
+    "hazardous_material": false,
+    "hazardous_regulations": "",
+    "age_restrictions": "None"
+  },
+  {
+    "sku": "PH-8002-GRN",
+    "name": "Organic Moringa Tea",
+    "description": "Premium moringa tea bags for a healthy lifestyle.",
+    "short_description": "20 organic moringa tea bags.",
+    "cost": 120,
+    "price": 299,
+    "sale_price": 249,
+    "stock": 100,
+    "stock_status": "in_stock",
+    "image": "https://placehold.co/600x400",
+    "category": "Grocery",
+    "tags": [
+      "tea",
+      "organic",
+      "moringa"
+    ],
+    "brand": "GreenLeaf",
+    "model_number": "GL-MT20",
+    "variant_attributes": {
+      "flavor": "Moringa"
+    },
+    "variant_price_override": 249,
+    "variant_sku": "PH-8002-GRN",
+    "weight": "0.1kg",
+    "dimensions": "15x10x5cm",
+    "free_shipping": false,
+    "ship_from": "Davao City, Davao del Sur",
+    "rating": 4.7,
+    "review_count": 18,
+    "review_details": [
+      {
+        "user": "Lito D.",
+        "rating": 5,
+        "comment": "Very refreshing and healthy."
+      }
+    ],
+    "country_of_origin": "Philippines",
+    "province_of_origin": "Davao del Sur",
+    "hazardous_material": false,
+    "hazardous_regulations": "",
+    "age_restrictions": "None"
+  },
+  {
+    "sku": "PH-9003-BLK",
+    "name": "Bluetooth Wireless Earbuds",
+    "description": "Noise-cancelling wireless earbuds with charging case.",
+    "short_description": "Bluetooth 5.0 wireless earbuds.",
+    "cost": 800,
+    "price": 1599,
+    "sale_price": 1399,
+    "stock": 30,
+    "stock_status": "in_stock",
+    "image": "https://placehold.co/600x400",
+    "category": "Electronics",
+    "tags": [
+      "earbuds",
+      "wireless",
+      "audio"
+    ],
+    "brand": "SoundPro",
+    "model_number": "SP-BT100",
+    "variant_attributes": {
+      "color": "Black"
+    },
+    "variant_price_override": 1399,
+    "variant_sku": "PH-9003-BLK",
+    "weight": "0.05kg",
+    "dimensions": "8x5x3cm",
+    "free_shipping": true,
+    "ship_from": "Cebu City, Cebu",
+    "rating": 4.5,
+    "review_count": 40,
+    "review_details": [
+      {
+        "user": "Jomar V.",
+        "rating": 4,
+        "comment": "Good sound, battery lasts long."
+      }
+    ],
+    "country_of_origin": "China",
+    "province_of_origin": "Cebu",
+    "hazardous_material": false,
+    "hazardous_regulations": "",
+    "age_restrictions": "None"
+  },
+  {
+    "sku": "PH-1004-WHT",
+    "name": "Cotton Bath Towel",
+    "description": "Soft and absorbent 100% cotton bath towel.",
+    "short_description": "70x140cm white bath towel.",
+    "cost": 250,
+    "price": 599,
+    "sale_price": 499,
+    "stock": 60,
+    "stock_status": "in_stock",
+    "image": "https://placehold.co/600x400",
+    "category": "Home & Living",
+    "tags": [
+      "towel",
+      "cotton",
+      "bath"
+    ],
+    "brand": "SoftTouch",
+    "model_number": "ST-BT70",
+    "variant_attributes": {
+      "color": "White"
+    },
+    "variant_price_override": 499,
+    "variant_sku": "PH-1004-WHT",
+    "weight": "0.4kg",
+    "dimensions": "70x140x1cm",
+    "free_shipping": false,
+    "ship_from": "San Fernando, Pampanga",
+    "rating": 4.9,
+    "review_count": 27,
+    "review_details": [
+      {
+        "user": "Grace L.",
+        "rating": 5,
+        "comment": "Super soft and dries quickly."
+      }
+    ],
+    "country_of_origin": "Philippines",
+    "province_of_origin": "Pampanga",
+    "hazardous_material": false,
+    "hazardous_regulations": "",
+    "age_restrictions": "None"
+  },
+  {
+    "sku": "PH-1105-RED",
+    "name": "Men's Running Shoes",
+    "description": "Lightweight and breathable running shoes for men.",
+    "short_description": "Men's size 9 running shoes.",
+    "cost": 900,
+    "price": 1999,
+    "sale_price": 1799,
+    "stock": 20,
+    "stock_status": "low_stock",
+    "image": "https://placehold.co/600x400",
+    "category": "Footwear",
+    "tags": [
+      "shoes",
+      "running",
+      "men"
+    ],
+    "brand": "Stride",
+    "model_number": "STRD-M9",
+    "variant_attributes": {
+      "color": "Red",
+      "size": "9"
+    },
+    "variant_price_override": 1799,
+    "variant_sku": "PH-1105-RED",
+    "weight": "0.7kg",
+    "dimensions": "32x20x12cm",
+    "free_shipping": true,
+    "ship_from": "Taguig City, Metro Manila",
+    "rating": 4.4,
+    "review_count": 15,
+    "review_details": [
+      {
+        "user": "Paolo R.",
+        "rating": 4,
+        "comment": "Very comfortable for jogging."
+      }
+    ],
+    "country_of_origin": "Vietnam",
+    "province_of_origin": "Metro Manila",
+    "hazardous_material": false,
+    "hazardous_regulations": "",
+    "age_restrictions": "None"
+  },
+  {
+    "sku": "PH-1206-GRY",
+    "name": "Laptop Backpack",
+    "description": "Water-resistant backpack fits up to 15.6-inch laptops.",
+    "short_description": "Grey laptop backpack with USB port.",
+    "cost": 600,
+    "price": 1299,
+    "sale_price": 1199,
+    "stock": 25,
+    "stock_status": "in_stock",
+    "image": "https://placehold.co/600x400",
+    "category": "Bags & Luggage",
+    "tags": [
+      "backpack",
+      "laptop",
+      "bag"
+    ],
+    "brand": "UrbanGear",
+    "model_number": "UG-LB15",
+    "variant_attributes": {
+      "color": "Grey"
+    },
+    "variant_price_override": 1199,
+    "variant_sku": "PH-1206-GRY",
+    "weight": "0.9kg",
+    "dimensions": "45x30x15cm",
+    "free_shipping": true,
+    "ship_from": "Iloilo City, Iloilo",
+    "rating": 4.6,
+    "review_count": 19,
+    "review_details": [
+      {
+        "user": "Rina T.",
+        "rating": 5,
+        "comment": "Spacious and stylish."
+      }
+    ],
+    "country_of_origin": "Philippines",
+    "province_of_origin": "Iloilo",
+    "hazardous_material": false,
+    "hazardous_regulations": "",
+    "age_restrictions": "None"
+  },
+  {
+    "sku": "PH-1307-PNK",
+    "name": "Wireless Mouse",
+    "description": "Ergonomic wireless mouse with adjustable DPI.",
+    "short_description": "Pink wireless mouse for laptops and PCs.",
+    "cost": 150,
+    "price": 399,
+    "sale_price": 349,
+    "stock": 80,
+    "stock_status": "in_stock",
+    "image": "https://placehold.co/600x400",
+    "category": "Computers & Accessories",
+    "tags": [
+      "mouse",
+      "wireless",
+      "computer"
+    ],
+    "brand": "ClickEase",
+    "model_number": "CE-WM01",
+    "variant_attributes": {
+      "color": "Pink"
+    },
+    "variant_price_override": 349,
+    "variant_sku": "PH-1307-PNK",
+    "weight": "0.08kg",
+    "dimensions": "11x6x4cm",
+    "free_shipping": false,
+    "ship_from": "Cagayan de Oro, Misamis Oriental",
+    "rating": 4.3,
+    "review_count": 12,
+    "review_details": [
+      {
+        "user": "Sam G.",
+        "rating": 4,
+        "comment": "Cute and works well."
+      }
+    ],
+    "country_of_origin": "China",
+    "province_of_origin": "Misamis Oriental",
+    "hazardous_material": false,
+    "hazardous_regulations": "",
+    "age_restrictions": "None"
+  },
+  {
+    "sku": "PH-1408-YLW",
+    "name": "Lemon Scented Candle",
+    "description": "Hand-poured soy candle with refreshing lemon scent.",
+    "short_description": "200g lemon scented soy candle.",
+    "cost": 180,
+    "price": 399,
+    "sale_price": 349,
+    "stock": 40,
+    "stock_status": "in_stock",
+    "image": "https://placehold.co/600x400",
+    "category": "Home Decor",
+    "tags": [
+      "candle",
+      "scented",
+      "lemon"
+    ],
+    "brand": "GlowHome",
+    "model_number": "GH-SC200",
+    "variant_attributes": {
+      "scent": "Lemon"
+    },
+    "variant_price_override": 349,
+    "variant_sku": "PH-1408-YLW",
+    "weight": "0.2kg",
+    "dimensions": "8x8x9cm",
+    "free_shipping": false,
+    "ship_from": "Bacolod City, Negros Occidental",
+    "rating": 4.9,
+    "review_count": 21,
+    "review_details": [
+      {
+        "user": "Tess A.",
+        "rating": 5,
+        "comment": "Smells amazing and lasts long."
+      }
+    ],
+    "country_of_origin": "Philippines",
+    "province_of_origin": "Negros Occidental",
+    "hazardous_material": false,
+    "hazardous_regulations": "",
+    "age_restrictions": "None"
+  },
+  {
+    "sku": "PH-1509-BLU",
+    "name": "Yoga Mat",
+    "description": "Non-slip yoga mat for all types of exercise.",
+    "short_description": "6mm thick blue yoga mat.",
+    "cost": 300,
+    "price": 799,
+    "sale_price": 699,
+    "stock": 35,
+    "stock_status": "in_stock",
+    "image": "https://placehold.co/600x400",
+    "category": "Sports & Outdoors",
+    "tags": [
+      "yoga",
+      "mat",
+      "exercise"
+    ],
+    "brand": "FlexFit",
+    "model_number": "FF-YM6",
+    "variant_attributes": {
+      "color": "Blue"
+    },
+    "variant_price_override": 699,
+    "variant_sku": "PH-1509-BLU",
+    "weight": "1.1kg",
+    "dimensions": "180x60x0.6cm",
+    "free_shipping": false,
+    "ship_from": "General Santos City, South Cotabato",
+    "rating": 4.7,
+    "review_count": 17,
+    "review_details": [
+      {
+        "user": "Ana P.",
+        "rating": 5,
+        "comment": "Perfect for my daily yoga routine."
+      }
+    ],
+    "country_of_origin": "Philippines",
+    "province_of_origin": "South Cotabato",
+    "hazardous_material": false,
+    "hazardous_regulations": "",
+    "age_restrictions": "None"
+  },
+  {
+    "sku": "PH-1610-GRN",
+    "name": "Succulent Plant Set",
+    "description": "Set of 3 easy-care succulent plants in ceramic pots.",
+    "short_description": "3-piece succulent plant set.",
+    "cost": 350,
+    "price": 899,
+    "sale_price": 799,
+    "stock": 28,
+    "stock_status": "in_stock",
+    "image": "https://placehold.co/600x400",
+    "category": "Garden & Outdoor",
+    "tags": [
+      "plants",
+      "succulent",
+      "garden"
+    ],
+    "brand": "GreenScape",
+    "model_number": "GS-SUC3",
+    "variant_attributes": {
+      "set": "3 plants"
+    },
+    "variant_price_override": 799,
+    "variant_sku": "PH-1610-GRN",
+    "weight": "1.5kg",
+    "dimensions": "30x10x10cm",
+    "free_shipping": false,
+    "ship_from": "Tagbilaran City, Bohol",
+    "rating": 4.8,
+    "review_count": 14,
+    "review_details": [
+      {
+        "user": "Benjie Q.",
+        "rating": 5,
+        "comment": "Arrived healthy and well-packed."
+      }
+    ],
+    "country_of_origin": "Philippines",
+    "province_of_origin": "Bohol",
+    "hazardous_material": false,
+    "hazardous_regulations": "",
+    "age_restrictions": "None"
+  },
+  {
+    "sku": "PH-1711-ORG",
+    "name": "Children's Story Book",
+    "description": "Illustrated story book for children ages 4-8.",
+    "short_description": "Hardcover story book, 32 pages.",
+    "cost": 100,
+    "price": 249,
+    "sale_price": 199,
+    "stock": 60,
+    "stock_status": "in_stock",
+    "image": "https://placehold.co/600x400",
+    "category": "Books",
+    "tags": [
+      "children",
+      "book",
+      "story"
+    ],
+    "brand": "LittleReaders",
+    "model_number": "LR-STB32",
+    "variant_attributes": {
+      "cover": "Hardcover"
+    },
+    "variant_price_override": 199,
+    "variant_sku": "PH-1711-ORG",
+    "weight": "0.3kg",
+    "dimensions": "22x22x1cm",
+    "free_shipping": false,
+    "ship_from": "Naga City, Camarines Sur",
+    "rating": 4.9,
+    "review_count": 23,
+    "review_details": [
+      {
+        "user": "Cathy M.",
+        "rating": 5,
+        "comment": "Beautiful illustrations and story."
+      }
+    ],
+    "country_of_origin": "Philippines",
+    "province_of_origin": "Camarines Sur",
+    "hazardous_material": false,
+    "hazardous_regulations": "",
+    "age_restrictions": "3+"
+  }
+]

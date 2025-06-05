@@ -37,7 +37,7 @@
             <Globe class="h-4 w-4" />
             <a class="hover:text-blue-300">EN</a>
           </div>
-          <div class="flex items-center justify-center gap-2">
+          <div class="hidden sm:flex items-center justify-center gap-2">
             <a href="#" class="text-sm font-medium hover:text-blue-600">Register</a>
             <span class="text-gray-400">|</span>
             <a href="#" class="text-sm font-medium hover:text-blue-600">Login</a>
@@ -59,17 +59,53 @@
       <!-- Desktop Nav -->
       <nav class="hidden md:flex gap-6 text-gray-700 text-sm">
         <router-link to="/" class="hover:text-blue-600">Home</router-link>
-        <router-link to="/products" class="hover:text-blue-600">Products</router-link>
-        <router-link to="/contact" class="hover:text-blue-600">Contact</router-link>
+        <div class="relative group">
+          <div class="hover:text-blue-600 flex items-center cursor-pointer">
+            Categories
+            <ChevronDown class="ml-1 w-4 h-4 transition-transform group-hover:rotate-180" />
+          </div>
+          <div
+            class="transform translate-x-1/2 absolute right-0 top-full w-96 bg-white text-gray-900 rounded-lg shadow-lg z-30 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 border border-gray-200 overflow-hidden">
+            <!-- Simple Header -->
+            <div class="px-4 py-2 bg-gray-50 border-b border-gray-100">
+              <h3 class="text-sm font-medium text-gray-700">Shop by Category</h3>
+            </div>
+
+            <!-- Categories -->
+            <div class="p-3">
+              <div class="grid grid-cols-3 gap-4">
+                <router-link v-for="cat in categories" :key="cat" :to="`/category/${encodeURIComponent(cat)}`"
+                  class="flex items-center px-3 py-2 hover:bg-gray-50 text-sm text-gray-700 hover:text-blue-600 transition-colors duration-150 rounded-md group/item">
+                  <!-- Simple dot indicator -->
+                  <div class="w-2 h-2 bg-gray-300 rounded-full mr-3 group-hover/item:bg-blue-500 transition-colors">
+                  </div>
+                  <span class="truncate">{{ cat }}</span>
+                </router-link>
+              </div>
+            </div>
+          </div>
+        </div>
+        <router-link to="/" class="hover:text-blue-600">Products</router-link>
       </nav>
 
       <!-- Right Side Icons -->
       <div class="flex items-center gap-4">
         <!-- Desktop Search -->
         <div class="relative ml-4 hidden sm:block">
-          <input type="text" placeholder="Search products..."
+          <input v-model="searchQuery" @input="updateSuggestions" @focus="updateSuggestions"
+            @blur="setTimeout(() => showSuggestions = false, 100)" type="text" placeholder="Search products..."
             class="w-64 pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm" />
           <Search class="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+          <div v-if="showSuggestions"
+            class="absolute left-0 mt-1 w-full bg-white border border-gray-200 rounded shadow-lg z-40">
+            <div v-for="suggestion in searchSuggestions" :key="suggestion.sku"
+              @mousedown.prevent="selectSuggestion(suggestion)"
+              class="px-4 py-2 cursor-pointer hover:bg-blue-50 text-sm text-gray-700 flex items-center gap-2">
+              <img :src="suggestion.image" alt="" class="w-8 h-8 object-cover rounded mr-2" />
+              <span>{{ suggestion.name }}</span>
+            </div>
+            <div v-if="searchSuggestions.length === 0" class="px-4 py-2 text-gray-400 text-sm">No results found</div>
+          </div>
         </div>
 
         <!-- Mobile Search Icon -->
@@ -84,7 +120,7 @@
           </div>
           <!-- Dropdown Menu -->
           <div v-if="userDropdownOpen"
-            class="absolute transform translate-x-1/2 right-0 mt-2 w-48 bg-white text-gray-900 rounded shadow-lg z-30 border">
+            class="absolute transform translate-x-1/2 right-0 mt-2 w-48 bg-white text-gray-700 rounded shadow-lg z-30 border">
             <a href="#" class="block px-4 py-2 hover:bg-blue-100 text-sm">Create Account</a>
             <a href="#" class="block px-4 py-2 hover:bg-blue-100 text-sm">My Orders</a>
             <a href="#" class="block px-4 py-2 hover:bg-blue-100 text-sm">Wishlist</a>
@@ -122,9 +158,20 @@
       <div v-if="mobileSearchOpen" ref="MobileSearchRef"
         class="block absolute top-full left-0 right-0 bg-white px-4 py-4 shadow-lg z-20 border-t sm:hidden">
         <div class="relative box-border">
-          <input type="text" placeholder="Search products..."
+          <input v-model="searchQuery" @input="updateSuggestions" @focus="updateSuggestions"
+            @blur="setTimeout(() => showSuggestions = false, 100)" type="text" placeholder="Search products..."
             class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent box-border" />
           <Search class="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+          <div v-if="showSuggestions"
+            class="absolute left-0 mt-1 w-full bg-white border border-gray-200 rounded shadow-lg z-40">
+            <div v-for="suggestion in searchSuggestions" :key="suggestion.sku"
+              @mousedown.prevent="selectSuggestion(suggestion)"
+              class="px-4 py-2 cursor-pointer hover:bg-blue-50 text-sm text-gray-700 flex items-center gap-2">
+              <img :src="suggestion.image" alt="" class="w-8 h-8 object-cover rounded mr-2" />
+              <span>{{ suggestion.name }}</span>
+            </div>
+            <div v-if="searchSuggestions.length === 0" class="px-4 py-2 text-gray-400 text-sm">No results found</div>
+          </div>
         </div>
       </div>
     </transition>
@@ -134,15 +181,34 @@
       <nav v-if="showMobileNav" ref="MobileNavRef"
         class="absolute top-full left-0 right-0 md:hidden bg-white px-4 pb-4 shadow-lg z-20 border-t">
         <router-link to="/" class="block py-2 text-gray-700 hover:text-blue-600">Home</router-link>
-        <router-link to="/products" class="block py-2 text-gray-700 hover:text-blue-600">Products</router-link>
-        <router-link to="/contact" class="block py-2 text-gray-700 hover:text-blue-600">Contact</router-link>
+
+        <!-- Mobile Categories Dropdown -->
+        <div>
+          <div @click="toggleCategoriesDropdown"
+            class="flex items-center justify-between py-2 text-gray-700 hover:text-blue-600 cursor-pointer">
+            <span>Categories</span>
+            <ChevronDown :class="{ 'transform rotate-180': categoriesDropdownOpen }"
+              class="w-4 h-4 transition-transform duration-200" />
+          </div>
+
+          <transition name="expand">
+            <div v-if="categoriesDropdownOpen" class="pl-4 border-l-2 border-gray-100 ml-2 mt-1 mb-2">
+              <router-link v-for="cat in categories" :key="cat" :to="`/category/${encodeURIComponent(cat)}`"
+                class="block py-2 text-sm text-gray-600 hover:text-blue-600 border-b border-gray-50 last:border-b-0">
+                {{ cat }}
+              </router-link>
+            </div>
+          </transition>
+        </div>
+
+        <router-link to="/" class="block py-2 text-gray-700 hover:text-blue-600">Products</router-link>
       </nav>
     </transition>
   </header>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { Globe, ChevronDown, Menu, X, UserRound, ShoppingBasket, Heart, Search } from 'lucide-vue-next'
 
 // Simple dropdown state management
@@ -153,6 +219,29 @@ const mobileSearchOpen = ref(false) // Mobile search
 const showMobileNav = ref(false)
 const spinning = ref(false)
 const currentIcon = ref(Menu)
+const categoriesDropdownOpen = ref(false)
+
+// temporary products
+const categories = ref([])
+const products = ref([])
+const searchQuery = ref("")
+const searchSuggestions = ref([])
+const showSuggestions = ref(false)
+
+onMounted(async () => {
+  const response = await fetch('/products.json')
+  const data = await response.json()
+  products.value = data
+  categories.value = [...new Set(data.map(p => p.category))]
+})
+
+const toggleCategoriesDropdown = () => {
+  categoriesDropdownOpen.value = !categoriesDropdownOpen.value
+}
+
+const closeCategoriesDropdownHandler = () => {
+  categoriesDropdownOpen.value = false
+}
 
 const toggleMoreDropdown = () => {
   moreDropdownOpen.value = !moreDropdownOpen.value
@@ -170,15 +259,6 @@ const toggleUserDropdown = () => {
 
 const closeUserDropdownHandler = () => {
   userDropdownOpen.value = false
-}
-
-// Desktop search toggle
-const toggleSearchbar = () => {
-  searchBarOpen.value = !searchBarOpen.value
-}
-
-const closeSearchbar = () => {
-  searchBarOpen.value = false
 }
 
 // Mobile search toggle
@@ -202,6 +282,26 @@ const handleIconClick = () => {
     currentIcon.value = showMobileNav.value ? X : Menu
     spinning.value = false
   }, 200)
+}
+
+const updateSuggestions = () => {
+  if (!searchQuery.value.trim()) {
+    searchSuggestions.value = []
+    showSuggestions.value = false
+    return
+  }
+  const query = searchQuery.value.toLowerCase()
+  searchSuggestions.value = products.value.filter(p =>
+    p.name.toLowerCase().includes(query) ||
+    (p.short_description && p.short_description.toLowerCase().includes(query))
+  ).slice(0, 5) // limit to 5 suggestions
+  showSuggestions.value = searchSuggestions.value.length > 0
+}
+
+const selectSuggestion = (product) => {
+  searchQuery.value = product.name
+  showSuggestions.value = false
+  // Optionally, navigate to the product page here
 }
 </script>
 
@@ -229,5 +329,18 @@ const handleIconClick = () => {
   to {
     transform: rotate(180deg);
   }
+}
+
+.expand-enter-active,
+.expand-leave-active {
+  transition: all 0.3s ease;
+  max-height: 500px;
+  overflow: hidden;
+}
+
+.expand-enter-from,
+.expand-leave-to {
+  max-height: 0;
+  opacity: 0;
 }
 </style>
