@@ -37,7 +37,11 @@
             <Globe class="h-4 w-4" />
             <a class="hover:text-blue-300">EN</a>
           </div>
-          <a href="#" class="hidden sm:inline text-sm hover:text-blue-300">Register | Login</a>
+          <div class="flex items-center justify-center gap-2">
+            <a href="#" class="text-sm font-medium hover:text-blue-600">Register</a>
+            <span class="text-gray-400">|</span>
+            <a href="#" class="text-sm font-medium hover:text-blue-600">Login</a>
+          </div>
         </div>
       </div>
     </div>
@@ -61,13 +65,26 @@
 
       <!-- Right Side Icons -->
       <div class="flex items-center gap-4">
+        <!-- Desktop Search -->
+        <div class="relative ml-4 hidden sm:block">
+          <input type="text" placeholder="Search products..."
+            class="w-64 pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm" />
+          <Search class="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+        </div>
+
+        <!-- Mobile Search Icon -->
+        <div @click="toggleMobileSearch" class="md:hidden cursor-pointer p-1 hover:bg-gray-100 rounded">
+          <Search class="h-5 w-5 text-gray-600 hover:text-blue-600 transition-colors" />
+        </div>
+
         <!-- User Account Dropdown -->
         <div class="relative" ref="userDropdownRef" v-click-outside="closeUserDropdownHandler">
           <div @click="toggleUserDropdown" class="flex items-center cursor-pointer p-1 hover:bg-gray-100 rounded">
             <UserRound class="h-5 w-5 text-gray-600 pb-1" />
           </div>
           <!-- Dropdown Menu -->
-          <div v-if="userDropdownOpen" class="absolute transform translate-x-1/2 right-0 mt-2 w-48 bg-white text-gray-900 rounded shadow-lg z-30 border">
+          <div v-if="userDropdownOpen"
+            class="absolute transform translate-x-1/2 right-0 mt-2 w-48 bg-white text-gray-900 rounded shadow-lg z-30 border">
             <a href="#" class="block px-4 py-2 hover:bg-blue-100 text-sm">Create Account</a>
             <a href="#" class="block px-4 py-2 hover:bg-blue-100 text-sm">My Orders</a>
             <a href="#" class="block px-4 py-2 hover:bg-blue-100 text-sm">Wishlist</a>
@@ -100,6 +117,18 @@
       </div>
     </div>
 
+    <!-- Mobile Search Bar -->
+    <transition name="slide">
+      <div v-if="mobileSearchOpen" ref="MobileSearchRef"
+        class="block absolute top-full left-0 right-0 bg-white px-4 py-4 shadow-lg z-20 border-t sm:hidden">
+        <div class="relative box-border">
+          <input type="text" placeholder="Search products..."
+            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent box-border" />
+          <Search class="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+        </div>
+      </div>
+    </transition>
+
     <!-- Mobile Menu -->
     <transition name="slide">
       <nav v-if="showMobileNav" ref="MobileNavRef"
@@ -114,11 +143,13 @@
 
 <script setup>
 import { ref } from 'vue'
-import { Globe, ChevronDown, Menu, X, UserRound, ShoppingBasket, Heart } from 'lucide-vue-next'
+import { Globe, ChevronDown, Menu, X, UserRound, ShoppingBasket, Heart, Search } from 'lucide-vue-next'
 
 // Simple dropdown state management
 const moreDropdownOpen = ref(false)
 const userDropdownOpen = ref(false)
+const searchBarOpen = ref(false) // Desktop search
+const mobileSearchOpen = ref(false) // Mobile search
 const showMobileNav = ref(false)
 const spinning = ref(false)
 const currentIcon = ref(Menu)
@@ -141,9 +172,32 @@ const closeUserDropdownHandler = () => {
   userDropdownOpen.value = false
 }
 
+// Desktop search toggle
+const toggleSearchbar = () => {
+  searchBarOpen.value = !searchBarOpen.value
+}
+
+const closeSearchbar = () => {
+  searchBarOpen.value = false
+}
+
+// Mobile search toggle
+const toggleMobileSearch = () => {
+  mobileSearchOpen.value = !mobileSearchOpen.value
+  // Close mobile nav if open
+  if (mobileSearchOpen.value && showMobileNav.value) {
+    showMobileNav.value = false
+    currentIcon.value = Menu
+  }
+}
+
 const handleIconClick = () => {
   spinning.value = true
   showMobileNav.value = !showMobileNav.value
+  // Close mobile search if open
+  if (showMobileNav.value && mobileSearchOpen.value) {
+    mobileSearchOpen.value = false
+  }
   setTimeout(() => {
     currentIcon.value = showMobileNav.value ? X : Menu
     spinning.value = false
