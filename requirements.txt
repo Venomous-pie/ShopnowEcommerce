@@ -12,9 +12,11 @@ django-cors-headers==4.7.0
 djangorestframework==3.16.0
 djangorestframework_simplejwt==5.5.0
 djoser==2.3.1
+ecdsa==0.19.1
 filelock==3.18.0
 identify==2.6.12
 idna==3.10
+MarkupSafe==3.0.2
 nodeenv==1.9.1
 oauthlib==3.2.2
 pillow==11.2.1
@@ -24,10 +26,13 @@ pycparser==2.22
 pyflakes==3.3.2
 PyJWT==2.9.0
 python-dotenv==1.1.0
+python-http-client==3.3.7
 python3-openid==3.2.0
 PyYAML==6.0.2
 requests==2.32.3
 requests-oauthlib==2.0.0
+sendgrid==6.12.3
+six==1.17.0
 social-auth-app-django==5.4.3
 social-auth-core==4.6.1
 sqlparse==0.5.3
@@ -36,3 +41,4 @@ typing_extensions==4.13.2
 tzdata==2025.2
 urllib3==2.4.0
 virtualenv==20.31.2
+Werkzeug==3.1.3
