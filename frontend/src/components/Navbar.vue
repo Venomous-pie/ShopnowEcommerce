@@ -13,13 +13,13 @@
             <a href="#" class="hover:text-blue-300">Customer Support</a>
           </div>
           <!-- Mobile Dropdown -->
-          <div class="relative sm:hidden" ref="dropdownRef" v-click-outside="closeMoreDropdownHandler">
-            <div @click="toggleMoreDropdown"
+          <div class="relative sm:hidden" ref="dropdownRef" v-click-outside="closeDropdown">
+            <div @click.stop="() => toggleDropdown('more')"
               class="flex items-center cursor-pointer select-none text-xs lg:text-sm px-2 py-1 rounded-md hover:bg-white/10 transition-colors duration-200"
-              :class="{ 'bg-white/10': moreDropdownOpen }" aria-haspopup="true" :aria-expanded="moreDropdownOpen">
+              :class="{ 'bg-white/10': isActive('more') }" aria-haspopup="true" :aria-expanded="isActive('more')">
               <span class="text-white">More</span>
               <ChevronDown class="ml-1 w-4 h-4 text-white transition-transform duration-200"
-                :class="{ 'rotate-180': moreDropdownOpen }" />
+                :class="{ 'rotate-180': isActive('more') }" />
             </div>
 
             <!-- Dropdown Menu -->
@@ -27,7 +27,7 @@
               enter-from-class="transform scale-95 opacity-0" enter-to-class="transform scale-100 opacity-100"
               leave-active-class="transition duration-150 ease-in" leave-from-class="transform scale-100 opacity-100"
               leave-to-class="transform scale-95 opacity-0">
-              <div v-if="moreDropdownOpen"
+              <div v-if="isActive('more')"
                 class="absolute left-0 mt-2 w-48 bg-white text-gray-700 rounded-lg shadow-lg z-30 border border-gray-200 overflow-hidden"
                 role="menu">
                 <div class="py-1">
@@ -96,12 +96,13 @@
       <!-- Desktop Nav -->
       <nav class="hidden md:flex gap-6 text-gray-700 text-sm">
         <router-link to="/" class="hover:text-blue-600">Home</router-link>
-        <div class="relative" @mouseenter="categoriesDropdownOpen = true" @mouseleave="categoriesDropdownOpen = false">
-          <div class="hover:text-blue-600 flex items-center cursor-pointer" @click="toggleCategoriesDropdown">
+        <div class="relative" @mouseenter="toggleDropdown('categories')" @mouseleave="closeDropdown('categories')">
+          <div class="hover:text-blue-600 flex items-center cursor-pointer"
+            @click.stop="() => toggleDropdown('categories')">
             Categories
-            <ChevronDown class="ml-1 w-4 h-4 transition-transform" :class="{ 'rotate-180': categoriesDropdownOpen }" />
+            <ChevronDown class="ml-1 w-4 h-4 transition-transform" :class="{ 'rotate-180': isActive('categories') }" />
           </div>
-          <div v-if="categoriesDropdownOpen"
+          <div v-if="isActive('categories')"
             class="absolute transform translate-x-3/7 right-0 top-full w-[36rem] bg-white text-gray-900 rounded-lg shadow-lg z-30 border border-gray-200 overflow-hidden">
             <!-- Simple Header -->
             <div class="px-4 py-1 bg-gray-50 border-b border-gray-100">
@@ -152,10 +153,10 @@
         </div>
 
         <!-- User Account Dropdown -->
-        <div class="relative" ref="userDropdownRef" v-click-outside="closeUserDropdownHandler">
-          <div @click="toggleUserDropdown"
+        <div class="relative" ref="userDropdownRef" v-click-outside="closeDropdown">
+          <div @click.stop="() => toggleDropdown('user')"
             class="flex items-center justify-center cursor-pointer p-2 hover:bg-gray-100 rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-200"
-            :class="{ 'bg-gray-100': userDropdownOpen }" aria-haspopup="true" :aria-expanded="userDropdownOpen">
+            :class="{ 'bg-gray-100': isActive('user') }" aria-haspopup="true" :aria-expanded="isActive('user')">
             <UserRound class="h-5 w-5 text-gray-600 mb-1" />
           </div>
 
@@ -164,7 +165,7 @@
             enter-from-class="transform scale-95 opacity-0" enter-to-class="transform scale-100 opacity-100"
             leave-active-class="transition duration-150 ease-in" leave-from-class="transform scale-100 opacity-100"
             leave-to-class="transform scale-95 opacity-0">
-            <div v-if="userDropdownOpen"
+            <div v-if="isActive('user')"
               class="absolute transfrom translate-x-3/7 mt-2 bg-white text-gray-700 rounded-lg shadow-lg z-30 border border-gray-200 overflow-hidden right-0 w-48 sm:w-56"
               role="menu">
               <div class="py-1">
@@ -255,15 +256,15 @@
 
         <!-- Mobile Categories Dropdown -->
         <div>
-          <div @click="toggleCategoriesDropdown"
+          <div @click.stop="() => toggleDropdown('categories')"
             class="flex items-center justify-between py-2 text-gray-700 hover:text-blue-600 cursor-pointer">
             <span>Categories</span>
-            <ChevronDown :class="{ 'transform rotate-180': categoriesDropdownOpen }"
+            <ChevronDown :class="{ 'transform rotate-180': isActive('categories') }"
               class="w-4 h-4 transition-transform duration-200" />
           </div>
 
           <transition name="expand">
-            <div v-if="categoriesDropdownOpen" class="pl-4 border-l-2 border-gray-100 ml-2 mt-1 mb-2">
+            <div v-if="isActive('categories')" class="pl-4 border-l-2 border-gray-100 ml-2 mt-1 mb-2">
               <router-link v-for="cat in categories" :key="cat" :to="`/category/${encodeURIComponent(cat)}`"
                 class="block py-2 text-sm text-gray-600 hover:text-blue-600 border-b border-gray-50 last:border-b-0">
                 {{ cat }}
@@ -313,15 +314,14 @@ import {
   Store,
   HelpCircle,
 } from 'lucide-vue-next'
+import { useDropdownManager } from '../composables/useDropdownManager'
 
 // Simple dropdown state management
-const moreDropdownOpen = ref(false)
-const userDropdownOpen = ref(false)
+const { activeDropdown, openDropdown, closeDropdown, isActive } = useDropdownManager()
 const mobileSearchOpen = ref(false)
 const showMobileNav = ref(false)
 const spinning = ref(false)
 const currentIcon = ref(Menu)
-const categoriesDropdownOpen = ref(false)
 
 const categories = ref([])
 const products = ref([])
@@ -377,30 +377,12 @@ onMounted(async () => {
   }
 })
 
-const toggleCategoriesDropdown = () => {
-  categoriesDropdownOpen.value = !categoriesDropdownOpen.value
-}
-
-const closeCategoriesDropdownHandler = () => {
-  categoriesDropdownOpen.value = false
-}
-
-const toggleMoreDropdown = () => {
-  moreDropdownOpen.value = !moreDropdownOpen.value
-  userDropdownOpen.value = false
-}
-
-const closeMoreDropdownHandler = () => {
-  moreDropdownOpen.value = false
-}
-
-const toggleUserDropdown = () => {
-  userDropdownOpen.value = !userDropdownOpen.value
-  moreDropdownOpen.value = false
-}
-
-const closeUserDropdownHandler = () => {
-  userDropdownOpen.value = false
+const toggleDropdown = (id) => {
+  if (isActive(id)) {
+    closeDropdown()
+  } else {
+    openDropdown(id)
+  }
 }
 
 // Mobile search toggle
