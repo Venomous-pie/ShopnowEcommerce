@@ -154,7 +154,7 @@
         </div>
 
         <!-- User Account Dropdown -->
-        <div class="relative" ref="userDropdownRef" v-click-outside="closeUserDropdown">
+        <div class="relative" ref="userDropdownRef" v-click-outside="closeDropdown">
           <div @click.stop="() => toggleDropdown('user')"
             class="flex items-center justify-center cursor-pointer p-2 hover:bg-gray-100 rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-200"
             :class="{ 'bg-gray-100': isActive('user') }" aria-haspopup="true" :aria-expanded="isActive('user')">
@@ -219,7 +219,7 @@
         </div>
 
         <!-- Mobile Burger -->
-        <div @click="handleIconClick" class="md:hidden cursor-pointer p-1">
+        <div @click.stop="handleMobileNavToggle" class="md:hidden cursor-pointer p-1">
           <component :is="currentIcon" :class="{ 'animate-spin': spinning }"
             class="w-5 h-5 text-gray-600 transition-transform duration-200" />
         </div>
@@ -251,7 +251,7 @@
 
     <!-- Mobile Menu -->
     <transition name="slide">
-      <nav v-if="showMobileNav" ref="MobileNavRef"
+      <nav v-if="showMobileNav" ref="MobileNavRef" v-click-outside="closeMobileNav"
         class="absolute top-full left-0 right-0 md:hidden bg-white px-4 pb-4 shadow-lg z-20 border-t">
         <router-link to="/" class="block py-2 text-gray-700 hover:text-blue-600">Home</router-link>
 
@@ -304,21 +304,34 @@ import { useCategories } from '../composables/useCategories'
 const { activeDropdown, openDropdown, closeDropdown, isActive } = useDropdownManager()
 const { categories, products, getCategoryIcon, loadCategories } = useCategories()
 const { searchQuery, searchSuggestions, showSuggestions, updateSuggestions, selectSuggestion } = useSearch(products)
-const { mobileSearchOpen, showMobileNav, spinning, currentIcon, toggleMobileSearch, handleIconClick } = useMobileNav()
+const { mobileSearchOpen, showMobileNav, spinning, currentIcon, toggleMobileSearch, handleIconClick, setShowMobileNav } = useMobileNav()
 
-// Dropdown toggle function
+// Enhanced dropdown toggle function
 const toggleDropdown = (id) => {
   if (isActive(id)) {
     closeDropdown()
   } else {
+    // Close mobile nav when opening a dropdown
+    if (showMobileNav && (id === 'user' || id === 'more')) {
+      setShowMobileNav(false)
+    }
     openDropdown(id)
   }
 }
 
-const closeUserDropdown = () => {
-  if (isActive('user')) {
+// Close mobile nav when clicking outside
+const closeMobileNav = () => {
+  if (showMobileNav) {
+    setShowMobileNav(false)
+  }
+}
+
+// Close dropdowns when mobile nav opens
+const handleMobileNavToggle = (event) => {
+  if (!showMobileNav) {
     closeDropdown()
   }
+  handleIconClick()
 }
 
 // Load categories on mount
