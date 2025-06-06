@@ -14,22 +14,59 @@
           </div>
           <!-- Mobile Dropdown -->
           <div class="relative sm:hidden" ref="dropdownRef" v-click-outside="closeMoreDropdownHandler">
-            <div @click="toggleMoreDropdown" class="flex items-center cursor-pointer select-none text-xs lg:text-sm">
-              <a>More</a>
-              <ChevronDown class="ml-1 w-4 h-4 text-white mt-1" />
+            <div @click="toggleMoreDropdown"
+              class="flex items-center cursor-pointer select-none text-xs lg:text-sm px-2 py-1 rounded-md hover:bg-white/10 transition-colors duration-200"
+              :class="{ 'bg-white/10': moreDropdownOpen }" aria-haspopup="true" :aria-expanded="moreDropdownOpen">
+              <span class="text-white">More</span>
+              <ChevronDown class="ml-1 w-4 h-4 text-white transition-transform duration-200"
+                :class="{ 'rotate-180': moreDropdownOpen }" />
             </div>
+
             <!-- Dropdown Menu -->
-            <div v-if="moreDropdownOpen"
-              class="absolute left-0 mt-2 w-40 bg-white text-gray-900 rounded shadow-lg z-30">
-              <a href="#" class="block px-4 py-2 hover:bg-blue-100">Download App</a>
-              <a href="#" class="block px-4 py-2 hover:bg-blue-100">Become a Seller</a>
-              <a href="#" class="block px-4 py-2 hover:bg-blue-100">Customer Support</a>
-              <div class="flex items-center justify-center hover:bg-blue-100 py-2">
-                <a href="#" class="block font-bold hover:text-blue-600">Register</a>
-                <span class="px-2 text-gray-400">|</span>
-                <a href="#" class="block font-bold hover:text-blue-600">Login</a>
+            <Transition enter-active-class="transition duration-200 ease-out"
+              enter-from-class="transform scale-95 opacity-0" enter-to-class="transform scale-100 opacity-100"
+              leave-active-class="transition duration-150 ease-in" leave-from-class="transform scale-100 opacity-100"
+              leave-to-class="transform scale-95 opacity-0">
+              <div v-if="moreDropdownOpen"
+                class="absolute left-0 mt-2 w-48 bg-white text-gray-700 rounded-lg shadow-lg z-30 border border-gray-200 overflow-hidden"
+                role="menu">
+                <div class="py-1">
+                  <a href="#"
+                    class="flex items-center px-4 py-2.5 hover:bg-gray-50 text-sm transition-colors duration-150 hover:text-blue-700"
+                    role="menuitem">
+                    <Smartphone class="h-4 w-4 mr-2 text-gray-500" />
+                    <span>Download App</span>
+                  </a>
+                  <a href="#"
+                    class="flex items-center px-4 py-2.5 hover:bg-gray-50 text-sm transition-colors duration-150 hover:text-blue-700"
+                    role="menuitem">
+                    <Store class="h-4 w-4 mr-2 text-gray-500" />
+                    <span>Become a Seller</span>
+                  </a>
+                  <a href="#"
+                    class="flex items-center px-4 py-2.5 hover:bg-gray-50 text-sm transition-colors duration-150 hover:text-blue-700"
+                    role="menuitem">
+                    <HelpCircle class="h-4 w-4 mr-2 text-gray-500" />
+                    <span>Customer Support</span>
+                  </a>
+                </div>
+
+                <hr class="border-gray-200" />
+
+                <div class="px-4 py-2">
+                  <div class="flex items-center justify-center gap-3">
+                    <a href="#"
+                      class="flex-1 text-center text-sm font-medium py-1.5 px-2 rounded-md bg-gray-100 hover:bg-gray-200 transition-colors duration-150">
+                      Register
+                    </a>
+                    <a href="#"
+                      class="flex-1 text-center text-sm font-medium py-1.5 px-2 rounded-md bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors duration-150">
+                      Login
+                    </a>
+                  </div>
+                </div>
               </div>
-            </div>
+            </Transition>
           </div>
         </div>
         <div class="flex items-center gap-4">
@@ -59,27 +96,28 @@
       <!-- Desktop Nav -->
       <nav class="hidden md:flex gap-6 text-gray-700 text-sm">
         <router-link to="/" class="hover:text-blue-600">Home</router-link>
-        <div class="relative group">
-          <div class="hover:text-blue-600 flex items-center cursor-pointer">
+        <div class="relative" @mouseenter="categoriesDropdownOpen = true" @mouseleave="categoriesDropdownOpen = false">
+          <div class="hover:text-blue-600 flex items-center cursor-pointer" @click="toggleCategoriesDropdown">
             Categories
-            <ChevronDown class="ml-1 w-4 h-4 transition-transform group-hover:rotate-180" />
+            <ChevronDown class="ml-1 w-4 h-4 transition-transform" :class="{ 'rotate-180': categoriesDropdownOpen }" />
           </div>
-          <div
-            class="transform translate-x-1/2 absolute right-0 top-full w-96 bg-white text-gray-900 rounded-lg shadow-lg z-30 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 border border-gray-200 overflow-hidden">
+          <div v-if="categoriesDropdownOpen"
+            class="absolute transform translate-x-3/7 right-0 top-full w-[36rem] bg-white text-gray-900 rounded-lg shadow-lg z-30 border border-gray-200 overflow-hidden">
             <!-- Simple Header -->
-            <div class="px-4 py-2 bg-gray-50 border-b border-gray-100">
+            <div class="px-4 py-1 bg-gray-50 border-b border-gray-100">
               <h3 class="text-sm font-medium text-gray-700">Shop by Category</h3>
             </div>
 
             <!-- Categories -->
             <div class="p-3">
-              <div class="grid grid-cols-3 gap-4">
+              <div :class="`grid gap-1 grid-cols-${Math.ceil(categories.length / 5)}`">
                 <router-link v-for="cat in categories" :key="cat" :to="`/category/${encodeURIComponent(cat)}`"
-                  class="flex items-center px-3 py-2 hover:bg-gray-50 text-sm text-gray-700 hover:text-blue-600 transition-colors duration-150 rounded-md group/item">
-                  <!-- Simple dot indicator -->
-                  <div class="w-2 h-2 bg-gray-300 rounded-full mr-3 group-hover/item:bg-blue-500 transition-colors">
+                  class="flex items-center px-3 py-4 hover:bg-gray-50 text-sm text-gray-700 hover:text-blue-600 transition-colors duration-150 rounded-md group/item">
+                  <!-- Category Icon -->
+                  <div class="w-5 h-5 flex items-center justify-center mr-2">
+                    <component :is="getCategoryIcon(cat)" class="w-4 h-4 text-gray-400" />
                   </div>
-                  <span class="truncate">{{ cat }}</span>
+                  <span>{{ cat }}</span>
                 </router-link>
               </div>
             </div>
@@ -91,9 +129,9 @@
       <!-- Right Side Icons -->
       <div class="flex items-center gap-4">
         <!-- Desktop Search -->
-        <div class="relative ml-4 hidden sm:block">
-          <input v-model="searchQuery" @input="updateSuggestions" @focus="updateSuggestions"
-            @blur="setTimeout(() => showSuggestions = false, 100)" type="text" placeholder="Search products..."
+        <div class="relative ml-4 hidden sm:block" v-click-outside="() => showSuggestions = false">
+          <input v-model="searchQuery" @input="updateSuggestions" @focus="updateSuggestions" type="text"
+            placeholder="Search products..."
             class="w-64 pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm" />
           <Search class="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
           <div v-if="showSuggestions"
@@ -115,24 +153,57 @@
 
         <!-- User Account Dropdown -->
         <div class="relative" ref="userDropdownRef" v-click-outside="closeUserDropdownHandler">
-          <div @click="toggleUserDropdown" class="flex items-center cursor-pointer p-1 hover:bg-gray-100 rounded">
-            <UserRound class="h-5 w-5 text-gray-600 pb-1" />
+          <div @click="toggleUserDropdown"
+            class="flex items-center justify-center cursor-pointer p-2 hover:bg-gray-100 rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-200"
+            :class="{ 'bg-gray-100': userDropdownOpen }" aria-haspopup="true" :aria-expanded="userDropdownOpen">
+            <UserRound class="h-5 w-5 text-gray-600 mb-1" />
           </div>
+
           <!-- Dropdown Menu -->
-          <div v-if="userDropdownOpen"
-            class="absolute transform translate-x-1/2 right-0 mt-2 w-48 bg-white text-gray-700 rounded shadow-lg z-30 border">
-            <a href="#" class="block px-4 py-2 hover:bg-blue-100 text-sm">Create Account</a>
-            <a href="#" class="block px-4 py-2 hover:bg-blue-100 text-sm">My Orders</a>
-            <a href="#" class="block px-4 py-2 hover:bg-blue-100 text-sm">Wishlist</a>
-            <hr class="my-1" />
-            <div class="px-4 py-2 hover:bg-blue-100">
-              <div class="flex items-center justify-center gap-2">
-                <a href="#" class="text-sm font-medium hover:text-blue-600">Register</a>
-                <span class="text-gray-400">|</span>
-                <a href="#" class="text-sm font-medium hover:text-blue-600">Login</a>
+          <Transition enter-active-class="transition duration-200 ease-out"
+            enter-from-class="transform scale-95 opacity-0" enter-to-class="transform scale-100 opacity-100"
+            leave-active-class="transition duration-150 ease-in" leave-from-class="transform scale-100 opacity-100"
+            leave-to-class="transform scale-95 opacity-0">
+            <div v-if="userDropdownOpen"
+              class="absolute transfrom translate-x-3/7 mt-2 bg-white text-gray-700 rounded-lg shadow-lg z-30 border border-gray-200 overflow-hidden right-0 w-48 sm:w-56"
+              role="menu">
+              <div class="py-1">
+                <a href="#"
+                  class="flex items-center px-4 py-2.5 hover:bg-gray-50 text-sm transition-colors duration-150 hover:text-blue-700"
+                  role="menuitem">
+                  <UserPlus class="h-4 w-4 mr-2 text-gray-500" />
+                  <span>Create Account</span>
+                </a>
+                <a href="#"
+                  class="flex items-center px-4 py-2.5 hover:bg-gray-50 text-sm transition-colors duration-150 hover:text-blue-700"
+                  role="menuitem">
+                  <Package class="h-4 w-4 mr-2 text-gray-500" />
+                  <span>My Orders</span>
+                </a>
+                <a href="#"
+                  class="flex items-center px-4 py-2.5 hover:bg-gray-50 text-sm transition-colors duration-150 hover:text-blue-700"
+                  role="menuitem">
+                  <Heart class="h-4 w-4 mr-2 text-gray-500" />
+                  <span>Wishlist</span>
+                </a>
+              </div>
+
+              <hr class="border-gray-200" />
+
+              <div class="px-4 py-2">
+                <div class="flex items-center justify-center gap-3 sm:gap-4">
+                  <a href="#"
+                    class="flex-1 text-center text-sm font-medium py-1.5 px-2 rounded-md bg-gray-100 hover:bg-gray-200 transition-colors duration-150">
+                    Register
+                  </a>
+                  <a href="#"
+                    class="flex-1 text-center text-sm font-medium py-1.5 px-2 rounded-md bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors duration-150">
+                    Login
+                  </a>
+                </div>
               </div>
             </div>
-          </div>
+          </Transition>
         </div>
 
         <!-- Wishlist Icon -->
@@ -158,8 +229,8 @@
       <div v-if="mobileSearchOpen" ref="MobileSearchRef"
         class="block absolute top-full left-0 right-0 bg-white px-4 py-4 shadow-lg z-20 border-t sm:hidden">
         <div class="relative box-border">
-          <input v-model="searchQuery" @input="updateSuggestions" @focus="updateSuggestions"
-            @blur="setTimeout(() => showSuggestions = false, 100)" type="text" placeholder="Search products..."
+          <input v-model="searchQuery" @input="updateSuggestions" @focus="updateSuggestions" type="text"
+            placeholder="Search products..."
             class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent box-border" />
           <Search class="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
           <div v-if="showSuggestions"
@@ -209,30 +280,101 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { Globe, ChevronDown, Menu, X, UserRound, ShoppingBasket, Heart, Search } from 'lucide-vue-next'
+import {
+  Globe,
+  ChevronDown,
+  Menu, X,
+  UserRound,
+  ShoppingBasket,
+  Heart,
+  Search,
+  Tag,
+  Monitor,
+  Home,
+  Shirt,
+  HeartHandshake,
+  Dumbbell,
+  ShoppingCart,
+  Leaf,
+  LampDesk,
+  ToyBrick,
+  Flame,
+  Star,
+  Gift,
+  BadgePercent,
+  Sparkles,
+  Footprints,
+  Backpack,
+  Cable,
+  BookOpen,
+  UserPlus,
+  Package,
+  Smartphone,
+  Store,
+  HelpCircle,
+} from 'lucide-vue-next'
 
 // Simple dropdown state management
 const moreDropdownOpen = ref(false)
 const userDropdownOpen = ref(false)
-const searchBarOpen = ref(false) // Desktop search
-const mobileSearchOpen = ref(false) // Mobile search
+const mobileSearchOpen = ref(false)
 const showMobileNav = ref(false)
 const spinning = ref(false)
 const currentIcon = ref(Menu)
 const categoriesDropdownOpen = ref(false)
 
-// temporary products
 const categories = ref([])
 const products = ref([])
 const searchQuery = ref("")
 const searchSuggestions = ref([])
 const showSuggestions = ref(false)
 
+const categoryIcons = {
+  'electronics': Monitor,
+  'home & kitchen': Home,
+  'sportswear': Dumbbell,
+  'health & wellness': HeartHandshake,
+  'toys & games': ToyBrick,
+  'office supplies': LampDesk,
+  'fashion': Shirt,
+  'beauty': Sparkles,
+  'sale': BadgePercent,
+  'new arrivals': Star,
+  'bestsellers': Flame,
+  'gifts': Gift,
+  'grocery': ShoppingCart,
+  'home & living': Home,
+  'footwear': Footprints,
+  'home decor': LampDesk,
+  'bags & luggage': Backpack,
+  'sports & outdoors': Dumbbell,
+  'computers & accessories': Cable,
+  'garden & outdoor': Leaf,
+  'books': BookOpen,
+  default: Tag
+}
+
+function getCategoryIcon(cat) {
+  if (!cat) return categoryIcons.default
+  const key = cat.trim().toLowerCase()
+  return categoryIcons[key] || categoryIcons.default
+}
+
 onMounted(async () => {
-  const response = await fetch('/products.json')
-  const data = await response.json()
-  products.value = data
-  categories.value = [...new Set(data.map(p => p.category))]
+  try {
+    const response = await fetch('/products.json')
+    const data = await response.json()
+    products.value = data
+    const counts = {}
+    data.forEach(p => {
+      counts[p.category] = (counts[p.category] || 0) + 1
+    })
+    const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1])
+    // Top 7 categories
+    categories.value = sorted.map(([cat]) => cat)
+  } catch (error) {
+    console.error('Error loading products:', error)
+  }
 })
 
 const toggleCategoriesDropdown = () => {
@@ -301,7 +443,6 @@ const updateSuggestions = () => {
 const selectSuggestion = (product) => {
   searchQuery.value = product.name
   showSuggestions.value = false
-  // Optionally, navigate to the product page here
 }
 </script>
 
