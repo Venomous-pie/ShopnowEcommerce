@@ -387,7 +387,7 @@ const closeCategoriesDropdownHandler = () => {
 
 const toggleMoreDropdown = () => {
   moreDropdownOpen.value = !moreDropdownOpen.value
-  userDropdownOpen.value = false // Close other dropdown
+  userDropdownOpen.value = false
 }
 
 const closeMoreDropdownHandler = () => {
@@ -396,7 +396,7 @@ const closeMoreDropdownHandler = () => {
 
 const toggleUserDropdown = () => {
   userDropdownOpen.value = !userDropdownOpen.value
-  moreDropdownOpen.value = false // Close other dropdown
+  moreDropdownOpen.value = false
 }
 
 const closeUserDropdownHandler = () => {
