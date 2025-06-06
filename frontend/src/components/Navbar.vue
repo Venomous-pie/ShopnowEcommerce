@@ -154,7 +154,7 @@
         </div>
 
         <!-- User Account Dropdown -->
-        <div class="relative" ref="userDropdownRef" v-click-outside="closeUserDropdown">
+        <div class="relative" ref="userDropdownRef" v-click-outside="closeDropdown">
           <div @click.stop="() => toggleDropdown('user')"
             class="flex items-center justify-center cursor-pointer p-2 hover:bg-gray-100 rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-200"
             :class="{ 'bg-gray-100': isActive('user') }" aria-haspopup="true" :aria-expanded="isActive('user')">
@@ -329,15 +329,9 @@ const closeMobileNav = () => {
 // Close dropdowns when mobile nav opens
 const handleMobileNavToggle = (event) => {
   if (!showMobileNav) {
-    closeDropdown() // Close any open dropdowns
-  }
-  handleIconClick()
-}
-
-const closeUserDropdown = () => {
-  if (isActive('user')) {
     closeDropdown()
   }
+  handleIconClick()
 }
 
 // Load categories on mount
