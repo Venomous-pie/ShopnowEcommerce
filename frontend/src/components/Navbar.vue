@@ -219,7 +219,7 @@
         </div>
 
         <!-- Mobile Burger -->
-        <div @click="handleIconClick" class="md:hidden cursor-pointer p-1">
+        <div @click="handleMobileNavToggle" class="md:hidden cursor-pointer p-1">
           <component :is="currentIcon" :class="{ 'animate-spin': spinning }"
             class="w-5 h-5 text-gray-600 transition-transform duration-200" />
         </div>
@@ -304,15 +304,27 @@ import { useCategories } from '../composables/useCategories'
 const { activeDropdown, openDropdown, closeDropdown, isActive } = useDropdownManager()
 const { categories, products, getCategoryIcon, loadCategories } = useCategories()
 const { searchQuery, searchSuggestions, showSuggestions, updateSuggestions, selectSuggestion } = useSearch(products)
-const { mobileSearchOpen, showMobileNav, spinning, currentIcon, toggleMobileSearch, handleIconClick } = useMobileNav()
+const { mobileSearchOpen, showMobileNav, spinning, currentIcon, toggleMobileSearch, handleIconClick, setShowMobileNav } = useMobileNav()
 
-// Dropdown toggle function
+// Enhanced dropdown toggle function
 const toggleDropdown = (id) => {
   if (isActive(id)) {
     closeDropdown()
   } else {
+    // Close mobile nav when opening a dropdown
+    if (showMobileNav && (id === 'user' || id === 'more')) {
+      setShowMobileNav(false)
+    }
     openDropdown(id)
   }
+}
+
+// Close dropdowns when mobile nav opens
+const handleMobileNavToggle = () => {
+  if (!showMobileNav) {
+    closeDropdown() // Close any open dropdowns
+  }
+  handleIconClick()
 }
 
 const closeUserDropdown = () => {
