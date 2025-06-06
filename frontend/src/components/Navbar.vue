@@ -167,7 +167,7 @@
             leave-active-class="transition duration-150 ease-in" leave-from-class="transform scale-100 opacity-100"
             leave-to-class="transform scale-95 opacity-0">
             <div v-if="isActive('user')"
-              class="absolute transfrom translate-x-3/7 mt-2 bg-white text-gray-700 rounded-lg shadow-lg z-30 border border-gray-200 overflow-hidden right-0 w-48 sm:w-56"
+              class="absolute transform translate-x-3/7 mt-2 bg-white text-gray-700 rounded-lg shadow-lg z-30 border border-gray-200 overflow-hidden right-0 w-48 sm:w-56"
               role="menu">
               <div class="py-1">
                 <a href="#"
@@ -219,7 +219,7 @@
         </div>
 
         <!-- Mobile Burger -->
-        <div @click="handleIconClick" class="md:hidden cursor-pointer p-1">
+        <div @click.stop="handleMobileNavToggle" class="md:hidden cursor-pointer p-1">
           <component :is="currentIcon" :class="{ 'animate-spin': spinning }"
             class="w-5 h-5 text-gray-600 transition-transform duration-200" />
         </div>
@@ -251,7 +251,7 @@
 
     <!-- Mobile Menu -->
     <transition name="slide">
-      <nav v-if="showMobileNav" ref="MobileNavRef"
+      <nav v-if="showMobileNav" ref="MobileNavRef" v-click-outside="closeMobileNav"
         class="absolute top-full left-0 right-0 md:hidden bg-white px-4 pb-4 shadow-lg z-20 border-t">
         <router-link to="/" class="block py-2 text-gray-700 hover:text-blue-600">Home</router-link>
 
@@ -281,34 +281,14 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { onMounted } from 'vue'
 import {
   Globe,
   ChevronDown,
-  Menu, X,
   UserRound,
   ShoppingBasket,
   Heart,
   Search,
-  Tag,
-  Monitor,
-  Home,
-  Shirt,
-  HeartHandshake,
-  Dumbbell,
-  ShoppingCart,
-  Leaf,
-  LampDesk,
-  ToyBrick,
-  Flame,
-  Star,
-  Gift,
-  BadgePercent,
-  Sparkles,
-  Footprints,
-  Backpack,
-  Cable,
-  BookOpen,
   UserPlus,
   Package,
   Smartphone,
@@ -316,116 +296,46 @@ import {
   HelpCircle,
 } from 'lucide-vue-next'
 import { useDropdownManager } from '../composables/useDropdownManager'
+import { useSearch } from '../composables/useSearch'
+import { useMobileNav } from '../composables/useMobileNav'
+import { useCategories } from '../composables/useCategories'
 
-// Simple dropdown state management
+// Initialize composables
 const { activeDropdown, openDropdown, closeDropdown, isActive } = useDropdownManager()
-const mobileSearchOpen = ref(false)
-const showMobileNav = ref(false)
-const spinning = ref(false)
-const currentIcon = ref(Menu)
+const { categories, products, getCategoryIcon, loadCategories } = useCategories()
+const { searchQuery, searchSuggestions, showSuggestions, updateSuggestions, selectSuggestion } = useSearch(products)
+const { mobileSearchOpen, showMobileNav, spinning, currentIcon, toggleMobileSearch, handleIconClick, setShowMobileNav } = useMobileNav()
 
-const categories = ref([])
-const products = ref([])
-const searchQuery = ref("")
-const searchSuggestions = ref([])
-const showSuggestions = ref(false)
-
-const categoryIcons = {
-  'electronics': Monitor,
-  'home & kitchen': Home,
-  'sportswear': Dumbbell,
-  'health & wellness': HeartHandshake,
-  'toys & games': ToyBrick,
-  'office supplies': LampDesk,
-  'fashion': Shirt,
-  'beauty': Sparkles,
-  'sale': BadgePercent,
-  'new arrivals': Star,
-  'bestsellers': Flame,
-  'gifts': Gift,
-  'grocery': ShoppingCart,
-  'home & living': Home,
-  'footwear': Footprints,
-  'home decor': LampDesk,
-  'bags & luggage': Backpack,
-  'sports & outdoors': Dumbbell,
-  'computers & accessories': Cable,
-  'garden & outdoor': Leaf,
-  'books': BookOpen,
-  default: Tag
-}
-
-function getCategoryIcon(cat) {
-  if (!cat) return categoryIcons.default
-  const key = cat.trim().toLowerCase()
-  return categoryIcons[key] || categoryIcons.default
-}
-
-onMounted(async () => {
-  try {
-    const response = await fetch('/products.json')
-    const data = await response.json()
-    products.value = data
-    const counts = {}
-    data.forEach(p => {
-      counts[p.category] = (counts[p.category] || 0) + 1
-    })
-    const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1])
-    categories.value = sorted.map(([cat]) => cat)
-  } catch (error) {
-    console.error('Error loading products:', error)
-  }
-})
-
+// Enhanced dropdown toggle function
 const toggleDropdown = (id) => {
   if (isActive(id)) {
     closeDropdown()
   } else {
+    // Close mobile nav when opening a dropdown
+    if (showMobileNav && (id === 'user' || id === 'more')) {
+      setShowMobileNav(false)
+    }
     openDropdown(id)
   }
 }
 
-// Mobile search toggle
-const toggleMobileSearch = () => {
-  mobileSearchOpen.value = !mobileSearchOpen.value
-  // Close mobile nav if open
-  if (mobileSearchOpen.value && showMobileNav.value) {
-    showMobileNav.value = false
-    currentIcon.value = Menu
+// Close mobile nav when clicking outside
+const closeMobileNav = () => {
+  if (showMobileNav) {
+    setShowMobileNav(false)
   }
 }
 
-const handleIconClick = () => {
-  spinning.value = true
-  showMobileNav.value = !showMobileNav.value
-  // Close mobile search if open
-  if (showMobileNav.value && mobileSearchOpen.value) {
-    mobileSearchOpen.value = false
+// Close dropdowns when mobile nav opens
+const handleMobileNavToggle = (event) => {
+  if (!showMobileNav) {
+    closeDropdown()
   }
-  setTimeout(() => {
-    currentIcon.value = showMobileNav.value ? X : Menu
-    spinning.value = false
-  }, 200)
+  handleIconClick()
 }
 
-const updateSuggestions = () => {
-  if (!searchQuery.value.trim()) {
-    searchSuggestions.value = []
-    showSuggestions.value = false
-    return
-  }
-  const query = searchQuery.value.toLowerCase()
-  searchSuggestions.value = products.value.filter(p =>
-    p.name.toLowerCase().includes(query) ||
-    (p.short_description && p.short_description.toLowerCase().includes(query))
-  ).slice(0, 5) // limit to 5 suggestions
-  showSuggestions.value = searchSuggestions.value.length > 0
-}
-
-const selectSuggestion = (product) => {
-  searchQuery.value = product.name
-  showSuggestions.value = false
-}
+// Load categories on mount
+onMounted(loadCategories)
 </script>
 
 <style scoped>
