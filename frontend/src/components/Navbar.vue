@@ -28,7 +28,7 @@
               leave-active-class="transition duration-150 ease-in" leave-from-class="transform scale-100 opacity-100"
               leave-to-class="transform scale-95 opacity-0">
               <div v-if="isActive('more')"
-                class="absolute left-0 mt-2 w-48 bg-white text-gray-700 rounded-lg shadow-lg z-30 border border-gray-200 overflow-hidden"
+                class="absolute left-0 mt-2 w-48 bg-white text-gray-700 rounded-lg shadow-lg z-50 border border-gray-200 overflow-hidden"
                 role="menu">
                 <div class="py-1">
                   <a href="#"
@@ -85,7 +85,7 @@
   </div>
 
   <!-- Main Navigation -->
-  <header class="bg-white shadow px-4 relative">
+  <header class="bg-white shadow px-4 relative sticky top-0 z-40">
     <div class="container mx-auto py-3 flex items-center justify-between">
       <!-- Logo -->
       <div class="flex items-center gap-2">
@@ -111,14 +111,15 @@
 
             <!-- Categories -->
             <div class="p-3">
-              <div :class="`grid gap-1 grid-cols-${Math.ceil(categories.length / 5)}`">
+              <div class="grid gap-1 grid-cols-[repeat(auto-fill,minmax(10rem,1fr))] max-h-[30rem] overflow-y-auto pr-1">
+
                 <router-link v-for="cat in categories" :key="cat" :to="`/category/${encodeURIComponent(cat)}`"
                   class="flex items-center px-3 py-4 hover:bg-gray-50 text-sm text-gray-700 hover:text-blue-600 transition-colors duration-150 rounded-md group/item">
                   <!-- Category Icon -->
                   <div class="w-5 h-5 flex items-center justify-center mr-2">
                     <component :is="getCategoryIcon(cat)" class="w-4 h-4 text-gray-400" />
                   </div>
-                  <span>{{ cat }}</span>
+                  <span>{{ cat.length > 20 ? cat.slice(0, 15) + '...' : cat }}</span>
                 </router-link>
               </div>
             </div>
@@ -370,7 +371,6 @@ onMounted(async () => {
       counts[p.category] = (counts[p.category] || 0) + 1
     })
     const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1])
-    // Top 7 categories
     categories.value = sorted.map(([cat]) => cat)
   } catch (error) {
     console.error('Error loading products:', error)
