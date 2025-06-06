@@ -219,7 +219,7 @@
         </div>
 
         <!-- Mobile Burger -->
-        <div @click="handleMobileNavToggle" class="md:hidden cursor-pointer p-1">
+        <div @click.stop="handleMobileNavToggle" class="md:hidden cursor-pointer p-1">
           <component :is="currentIcon" :class="{ 'animate-spin': spinning }"
             class="w-5 h-5 text-gray-600 transition-transform duration-200" />
         </div>
@@ -251,7 +251,7 @@
 
     <!-- Mobile Menu -->
     <transition name="slide">
-      <nav v-if="showMobileNav" ref="MobileNavRef"
+      <nav v-if="showMobileNav" ref="MobileNavRef" v-click-outside="closeMobileNav"
         class="absolute top-full left-0 right-0 md:hidden bg-white px-4 pb-4 shadow-lg z-20 border-t">
         <router-link to="/" class="block py-2 text-gray-700 hover:text-blue-600">Home</router-link>
 
@@ -319,8 +319,15 @@ const toggleDropdown = (id) => {
   }
 }
 
+// Close mobile nav when clicking outside
+const closeMobileNav = () => {
+  if (showMobileNav) {
+    setShowMobileNav(false)
+  }
+}
+
 // Close dropdowns when mobile nav opens
-const handleMobileNavToggle = () => {
+const handleMobileNavToggle = (event) => {
   if (!showMobileNav) {
     closeDropdown() // Close any open dropdowns
   }
