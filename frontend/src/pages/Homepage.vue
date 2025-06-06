@@ -10,7 +10,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="container mx-auto px-4">
+  <div class="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16">
     <h2>Product List</h2>
     <div v-for="product in products" :key="product.sku" class="product-card">
       <img :src="product.image" :alt="product.name" width="200" />
