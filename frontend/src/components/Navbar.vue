@@ -20,7 +20,7 @@
             </div>
             <!-- Dropdown Menu -->
             <div v-if="moreDropdownOpen"
-              class="absolute left-0 mt-2 w-40 bg-white text-gray-900 rounded shadow-lg z-30">
+              class="absolute left-0 mt-2 w-40 bg-white text-gray-700 rounded shadow-lg z-30">
               <a href="#" class="block px-4 py-2 hover:bg-blue-100">Download App</a>
               <a href="#" class="block px-4 py-2 hover:bg-blue-100">Become a Seller</a>
               <a href="#" class="block px-4 py-2 hover:bg-blue-100">Customer Support</a>
@@ -65,21 +65,26 @@
             <ChevronDown class="ml-1 w-4 h-4 transition-transform group-hover:rotate-180" />
           </div>
           <div
-            class="transform translate-x-1/2 absolute right-0 top-full w-96 bg-white text-gray-900 rounded-lg shadow-lg z-30 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 border border-gray-200 overflow-hidden">
+            class="transform translate-x-1/2 absolute right-0 top-full w-[36rem] bg-white text-gray-900 rounded-lg shadow-lg z-30 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 border border-gray-200 overflow-hidden">
             <!-- Simple Header -->
-            <div class="px-4 py-2 bg-gray-50 border-b border-gray-100">
+            <div class="px-4 py-1 bg-gray-50 border-b border-gray-100">
               <h3 class="text-sm font-medium text-gray-700">Shop by Category</h3>
             </div>
 
             <!-- Categories -->
             <div class="p-3">
-              <div class="grid grid-cols-3 gap-4">
+              <div :class="`grid grid-cols-${Math.ceil(categories.length / 5)}`">
                 <router-link v-for="cat in categories" :key="cat" :to="`/category/${encodeURIComponent(cat)}`"
-                  class="flex items-center px-3 py-2 hover:bg-gray-50 text-sm text-gray-700 hover:text-blue-600 transition-colors duration-150 rounded-md group/item">
-                  <!-- Simple dot indicator -->
-                  <div class="w-2 h-2 bg-gray-300 rounded-full mr-3 group-hover/item:bg-blue-500 transition-colors">
+                  class="flex items-center px-3 py-4 hover:bg-gray-50 text-sm text-gray-700 hover:text-blue-600 transition-colors duration-150 rounded-md group/item">
+                  <!-- Category Icon -->
+                  <div class="w-5 h-5 flex items-center justify-center mr-2">
+                    <component :is="getCategoryIcon(cat)" class="w-4 h-4 text-gray-400" />
                   </div>
-                  <span class="truncate">{{ cat }}</span>
+                  <span>{{ cat }}</span>
+                  <span v-if="isSpecialCategory(cat)"
+                    :class="'ml-2 px-2 py-0.5 rounded text-xs font-semibold ' + specialBadgeClass(cat)">
+                    {{ cat }}
+                  </span>
                 </router-link>
               </div>
             </div>
@@ -209,7 +214,34 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { Globe, ChevronDown, Menu, X, UserRound, ShoppingBasket, Heart, Search } from 'lucide-vue-next'
+import {
+  Globe,
+  ChevronDown,
+  Menu, X,
+  UserRound,
+  ShoppingBasket,
+  Heart,
+  Search,
+  Tag,
+  Monitor,
+  Home,
+  Shirt,
+  HeartHandshake,
+  Dumbbell,
+  ShoppingCart,
+  Leaf,
+  LampDesk,
+  ToyBrick,
+  Flame,
+  Star,
+  Gift,
+  BadgePercent,
+  Sparkles,
+  Footprints,
+  Backpack,
+  Cable,
+  BookOpen
+} from 'lucide-vue-next'
 
 // Simple dropdown state management
 const moreDropdownOpen = ref(false)
@@ -221,18 +253,57 @@ const spinning = ref(false)
 const currentIcon = ref(Menu)
 const categoriesDropdownOpen = ref(false)
 
-// temporary products
 const categories = ref([])
 const products = ref([])
 const searchQuery = ref("")
 const searchSuggestions = ref([])
 const showSuggestions = ref(false)
 
+const categoryIcons = {
+  'electronics': Monitor,
+  'home & kitchen': Home,
+  'sportswear': Dumbbell,
+  'health & wellness': HeartHandshake,
+  'toys & games': ToyBrick,
+  'office supplies': LampDesk,
+  'fashion': Shirt,
+  'beauty': Sparkles,
+  'sale': BadgePercent,
+  'new arrivals': Star,
+  'bestsellers': Flame,
+  'gifts': Gift,
+  'grocery': ShoppingCart,
+  'home & living': Home,
+  'footwear': Footprints,
+  'home decor': LampDesk,
+  'bags & luggage': Backpack,
+  'sports & outdoors': Dumbbell,
+  'computers & accessories': Cable,
+  'garden & outdoor': Leaf,
+  'books': BookOpen,
+  // Add more as needed
+  default: Tag
+}
+
+function getCategoryIcon(cat) {
+  if (!cat) return categoryIcons.default
+  const key = cat.trim().toLowerCase()
+  return categoryIcons[key] || categoryIcons.default
+}
+
 onMounted(async () => {
   const response = await fetch('/products.json')
   const data = await response.json()
   products.value = data
-  categories.value = [...new Set(data.map(p => p.category))]
+  // Count products per category
+  const counts = {}
+  data.forEach(p => {
+    counts[p.category] = (counts[p.category] || 0) + 1
+  })
+  // Sort categories by product count, descending
+  const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1])
+  // Top 7 categories
+  categories.value = sorted.map(([cat]) => cat)
 })
 
 const toggleCategoriesDropdown = () => {
@@ -302,6 +373,17 @@ const selectSuggestion = (product) => {
   searchQuery.value = product.name
   showSuggestions.value = false
   // Optionally, navigate to the product page here
+}
+
+// Helper to check if a category is 'Sale' or 'New Arrivals'
+const isSpecialCategory = (cat) => {
+  return cat.toLowerCase() === 'sale' || cat.toLowerCase() === 'new arrivals'
+}
+
+const specialBadgeClass = (cat) => {
+  if (cat.toLowerCase() === 'sale') return 'bg-red-500 text-white'
+  if (cat.toLowerCase() === 'new arrivals') return 'bg-blue-500 text-white'
+  return ''
 }
 </script>
 
