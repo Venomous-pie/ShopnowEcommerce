@@ -13,23 +13,60 @@
             <a href="#" class="hover:text-blue-300">Customer Support</a>
           </div>
           <!-- Mobile Dropdown -->
-          <div class="relative sm:hidden" ref="dropdownRef" v-click-outside="closeMoreDropdownHandler">
-            <div @click="toggleMoreDropdown" class="flex items-center cursor-pointer select-none text-xs lg:text-sm">
-              <a>More</a>
-              <ChevronDown class="ml-1 w-4 h-4 text-white mt-1" />
+          <div class="relative sm:hidden" ref="dropdownRef" v-click-outside="closeDropdown">
+            <div @click.stop="() => toggleDropdown('more')"
+              class="flex items-center cursor-pointer select-none text-xs lg:text-sm px-2 py-1 rounded-md hover:bg-white/10 transition-colors duration-200"
+              :class="{ 'bg-white/10': isActive('more') }" aria-haspopup="true" :aria-expanded="isActive('more')">
+              <span class="text-white">More</span>
+              <ChevronDown class="ml-1 w-4 h-4 text-white transition-transform duration-200"
+                :class="{ 'rotate-180': isActive('more') }" />
             </div>
+
             <!-- Dropdown Menu -->
-            <div v-if="moreDropdownOpen"
-              class="absolute left-0 mt-2 w-40 bg-white text-gray-700 rounded shadow-lg z-30">
-              <a href="#" class="block px-4 py-2 hover:bg-blue-100">Download App</a>
-              <a href="#" class="block px-4 py-2 hover:bg-blue-100">Become a Seller</a>
-              <a href="#" class="block px-4 py-2 hover:bg-blue-100">Customer Support</a>
-              <div class="flex items-center justify-center hover:bg-blue-100 py-2">
-                <a href="#" class="block font-bold hover:text-blue-600">Register</a>
-                <span class="px-2 text-gray-400">|</span>
-                <a href="#" class="block font-bold hover:text-blue-600">Login</a>
+            <Transition enter-active-class="transition duration-200 ease-out"
+              enter-from-class="transform scale-95 opacity-0" enter-to-class="transform scale-100 opacity-100"
+              leave-active-class="transition duration-150 ease-in" leave-from-class="transform scale-100 opacity-100"
+              leave-to-class="transform scale-95 opacity-0">
+              <div v-if="isActive('more')"
+                class="absolute left-0 mt-2 w-48 bg-white text-gray-700 rounded-lg shadow-lg z-50 border border-gray-200 overflow-hidden"
+                role="menu">
+                <div class="py-1">
+                  <a href="#"
+                    class="flex items-center px-4 py-2.5 hover:bg-gray-50 text-sm transition-colors duration-150 hover:text-blue-700"
+                    role="menuitem">
+                    <Smartphone class="h-4 w-4 mr-2 text-gray-500" />
+                    <span>Download App</span>
+                  </a>
+                  <a href="#"
+                    class="flex items-center px-4 py-2.5 hover:bg-gray-50 text-sm transition-colors duration-150 hover:text-blue-700"
+                    role="menuitem">
+                    <Store class="h-4 w-4 mr-2 text-gray-500" />
+                    <span>Become a Seller</span>
+                  </a>
+                  <a href="#"
+                    class="flex items-center px-4 py-2.5 hover:bg-gray-50 text-sm transition-colors duration-150 hover:text-blue-700"
+                    role="menuitem">
+                    <HelpCircle class="h-4 w-4 mr-2 text-gray-500" />
+                    <span>Customer Support</span>
+                  </a>
+                </div>
+
+                <hr class="border-gray-200" />
+
+                <div class="px-4 py-2">
+                  <div class="flex items-center justify-center gap-3">
+                    <a href="#"
+                      class="flex-1 text-center text-sm font-medium py-1.5 px-2 rounded-md bg-gray-100 hover:bg-gray-200 transition-colors duration-150">
+                      Register
+                    </a>
+                    <a href="#"
+                      class="flex-1 text-center text-sm font-medium py-1.5 px-2 rounded-md bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors duration-150">
+                      Login
+                    </a>
+                  </div>
+                </div>
               </div>
-            </div>
+            </Transition>
           </div>
         </div>
         <div class="flex items-center gap-4">
@@ -48,7 +85,7 @@
   </div>
 
   <!-- Main Navigation -->
-  <header class="bg-white shadow px-4 relative">
+  <header class="bg-white shadow px-4 relative sticky top-0 z-40">
     <div class="container mx-auto py-3 flex items-center justify-between">
       <!-- Logo -->
       <div class="flex items-center gap-2">
@@ -59,13 +96,14 @@
       <!-- Desktop Nav -->
       <nav class="hidden md:flex gap-6 text-gray-700 text-sm">
         <router-link to="/" class="hover:text-blue-600">Home</router-link>
-        <div class="relative group">
-          <div class="hover:text-blue-600 flex items-center cursor-pointer">
+        <div class="relative" @mouseenter="toggleDropdown('categories')" @mouseleave="closeDropdown('categories')">
+          <div class="hover:text-blue-600 flex items-center cursor-pointer"
+            @click.stop="() => toggleDropdown('categories')">
             Categories
-            <ChevronDown class="ml-1 w-4 h-4 transition-transform group-hover:rotate-180" />
+            <ChevronDown class="ml-1 w-4 h-4 transition-transform" :class="{ 'rotate-180': isActive('categories') }" />
           </div>
-          <div
-            class="transform translate-x-1/2 absolute right-0 top-full w-[36rem] bg-white text-gray-900 rounded-lg shadow-lg z-30 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 border border-gray-200 overflow-hidden">
+          <div v-if="isActive('categories')"
+            class="absolute transform translate-x-3/7 right-0 top-full w-[36rem] bg-white text-gray-900 rounded-lg shadow-lg z-30 border border-gray-200 overflow-hidden">
             <!-- Simple Header -->
             <div class="px-4 py-1 bg-gray-50 border-b border-gray-100">
               <h3 class="text-sm font-medium text-gray-700">Shop by Category</h3>
@@ -73,18 +111,15 @@
 
             <!-- Categories -->
             <div class="p-3">
-              <div :class="`grid grid-cols-${Math.ceil(categories.length / 5)}`">
+              <div class="grid gap-1 grid-cols-[repeat(auto-fill,minmax(10rem,1fr))] max-h-[30rem] overflow-y-auto pr-1">
+
                 <router-link v-for="cat in categories" :key="cat" :to="`/category/${encodeURIComponent(cat)}`"
                   class="flex items-center px-3 py-4 hover:bg-gray-50 text-sm text-gray-700 hover:text-blue-600 transition-colors duration-150 rounded-md group/item">
                   <!-- Category Icon -->
                   <div class="w-5 h-5 flex items-center justify-center mr-2">
                     <component :is="getCategoryIcon(cat)" class="w-4 h-4 text-gray-400" />
                   </div>
-                  <span>{{ cat }}</span>
-                  <span v-if="isSpecialCategory(cat)"
-                    :class="'ml-2 px-2 py-0.5 rounded text-xs font-semibold ' + specialBadgeClass(cat)">
-                    {{ cat }}
-                  </span>
+                  <span>{{ cat.length > 20 ? cat.slice(0, 15) + '...' : cat }}</span>
                 </router-link>
               </div>
             </div>
@@ -96,9 +131,9 @@
       <!-- Right Side Icons -->
       <div class="flex items-center gap-4">
         <!-- Desktop Search -->
-        <div class="relative ml-4 hidden sm:block">
-          <input v-model="searchQuery" @input="updateSuggestions" @focus="updateSuggestions"
-            @blur="setTimeout(() => showSuggestions = false, 100)" type="text" placeholder="Search products..."
+        <div class="relative ml-4 hidden sm:block" v-click-outside="() => showSuggestions = false">
+          <input v-model="searchQuery" @input="updateSuggestions" @focus="updateSuggestions" type="text"
+            placeholder="Search products..."
             class="w-64 pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm" />
           <Search class="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
           <div v-if="showSuggestions"
@@ -119,25 +154,58 @@
         </div>
 
         <!-- User Account Dropdown -->
-        <div class="relative" ref="userDropdownRef" v-click-outside="closeUserDropdownHandler">
-          <div @click="toggleUserDropdown" class="flex items-center cursor-pointer p-1 hover:bg-gray-100 rounded">
-            <UserRound class="h-5 w-5 text-gray-600 pb-1" />
+        <div class="relative" ref="userDropdownRef" v-click-outside="closeDropdown">
+          <div @click.stop="() => toggleDropdown('user')"
+            class="flex items-center justify-center cursor-pointer p-2 hover:bg-gray-100 rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-200"
+            :class="{ 'bg-gray-100': isActive('user') }" aria-haspopup="true" :aria-expanded="isActive('user')">
+            <UserRound class="h-5 w-5 text-gray-600 mb-1" />
           </div>
+
           <!-- Dropdown Menu -->
-          <div v-if="userDropdownOpen"
-            class="absolute transform translate-x-1/2 right-0 mt-2 w-48 bg-white text-gray-700 rounded shadow-lg z-30 border">
-            <a href="#" class="block px-4 py-2 hover:bg-blue-100 text-sm">Create Account</a>
-            <a href="#" class="block px-4 py-2 hover:bg-blue-100 text-sm">My Orders</a>
-            <a href="#" class="block px-4 py-2 hover:bg-blue-100 text-sm">Wishlist</a>
-            <hr class="my-1" />
-            <div class="px-4 py-2 hover:bg-blue-100">
-              <div class="flex items-center justify-center gap-2">
-                <a href="#" class="text-sm font-medium hover:text-blue-600">Register</a>
-                <span class="text-gray-400">|</span>
-                <a href="#" class="text-sm font-medium hover:text-blue-600">Login</a>
+          <Transition enter-active-class="transition duration-200 ease-out"
+            enter-from-class="transform scale-95 opacity-0" enter-to-class="transform scale-100 opacity-100"
+            leave-active-class="transition duration-150 ease-in" leave-from-class="transform scale-100 opacity-100"
+            leave-to-class="transform scale-95 opacity-0">
+            <div v-if="isActive('user')"
+              class="absolute transform translate-x-3/7 mt-2 bg-white text-gray-700 rounded-lg shadow-lg z-30 border border-gray-200 overflow-hidden right-0 w-48 sm:w-56"
+              role="menu">
+              <div class="py-1">
+                <a href="#"
+                  class="flex items-center px-4 py-2.5 hover:bg-gray-50 text-sm transition-colors duration-150 hover:text-blue-700"
+                  role="menuitem">
+                  <UserPlus class="h-4 w-4 mr-2 text-gray-500" />
+                  <span>Create Account</span>
+                </a>
+                <a href="#"
+                  class="flex items-center px-4 py-2.5 hover:bg-gray-50 text-sm transition-colors duration-150 hover:text-blue-700"
+                  role="menuitem">
+                  <Package class="h-4 w-4 mr-2 text-gray-500" />
+                  <span>My Orders</span>
+                </a>
+                <a href="#"
+                  class="flex items-center px-4 py-2.5 hover:bg-gray-50 text-sm transition-colors duration-150 hover:text-blue-700"
+                  role="menuitem">
+                  <Heart class="h-4 w-4 mr-2 text-gray-500" />
+                  <span>Wishlist</span>
+                </a>
+              </div>
+
+              <hr class="border-gray-200" />
+
+              <div class="px-4 py-2">
+                <div class="flex items-center justify-center gap-3 sm:gap-4">
+                  <a href="#"
+                    class="flex-1 text-center text-sm font-medium py-1.5 px-2 rounded-md bg-gray-100 hover:bg-gray-200 transition-colors duration-150">
+                    Register
+                  </a>
+                  <a href="#"
+                    class="flex-1 text-center text-sm font-medium py-1.5 px-2 rounded-md bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors duration-150">
+                    Login
+                  </a>
+                </div>
               </div>
             </div>
-          </div>
+          </Transition>
         </div>
 
         <!-- Wishlist Icon -->
@@ -151,7 +219,7 @@
         </div>
 
         <!-- Mobile Burger -->
-        <div @click="handleIconClick" class="md:hidden cursor-pointer p-1">
+        <div @click.stop="handleMobileNavToggle" class="md:hidden cursor-pointer p-1">
           <component :is="currentIcon" :class="{ 'animate-spin': spinning }"
             class="w-5 h-5 text-gray-600 transition-transform duration-200" />
         </div>
@@ -163,8 +231,8 @@
       <div v-if="mobileSearchOpen" ref="MobileSearchRef"
         class="block absolute top-full left-0 right-0 bg-white px-4 py-4 shadow-lg z-20 border-t sm:hidden">
         <div class="relative box-border">
-          <input v-model="searchQuery" @input="updateSuggestions" @focus="updateSuggestions"
-            @blur="setTimeout(() => showSuggestions = false, 100)" type="text" placeholder="Search products..."
+          <input v-model="searchQuery" @input="updateSuggestions" @focus="updateSuggestions" type="text"
+            placeholder="Search products..."
             class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent box-border" />
           <Search class="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
           <div v-if="showSuggestions"
@@ -183,21 +251,21 @@
 
     <!-- Mobile Menu -->
     <transition name="slide">
-      <nav v-if="showMobileNav" ref="MobileNavRef"
+      <nav v-if="showMobileNav" ref="MobileNavRef" v-click-outside="closeMobileNav"
         class="absolute top-full left-0 right-0 md:hidden bg-white px-4 pb-4 shadow-lg z-20 border-t">
         <router-link to="/" class="block py-2 text-gray-700 hover:text-blue-600">Home</router-link>
 
         <!-- Mobile Categories Dropdown -->
         <div>
-          <div @click="toggleCategoriesDropdown"
+          <div @click.stop="() => toggleDropdown('categories')"
             class="flex items-center justify-between py-2 text-gray-700 hover:text-blue-600 cursor-pointer">
             <span>Categories</span>
-            <ChevronDown :class="{ 'transform rotate-180': categoriesDropdownOpen }"
+            <ChevronDown :class="{ 'transform rotate-180': isActive('categories') }"
               class="w-4 h-4 transition-transform duration-200" />
           </div>
 
           <transition name="expand">
-            <div v-if="categoriesDropdownOpen" class="pl-4 border-l-2 border-gray-100 ml-2 mt-1 mb-2">
+            <div v-if="isActive('categories')" class="pl-4 border-l-2 border-gray-100 ml-2 mt-1 mb-2">
               <router-link v-for="cat in categories" :key="cat" :to="`/category/${encodeURIComponent(cat)}`"
                 class="block py-2 text-sm text-gray-600 hover:text-blue-600 border-b border-gray-50 last:border-b-0">
                 {{ cat }}
@@ -213,178 +281,61 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { onMounted } from 'vue'
 import {
   Globe,
   ChevronDown,
-  Menu, X,
   UserRound,
   ShoppingBasket,
   Heart,
   Search,
-  Tag,
-  Monitor,
-  Home,
-  Shirt,
-  HeartHandshake,
-  Dumbbell,
-  ShoppingCart,
-  Leaf,
-  LampDesk,
-  ToyBrick,
-  Flame,
-  Star,
-  Gift,
-  BadgePercent,
-  Sparkles,
-  Footprints,
-  Backpack,
-  Cable,
-  BookOpen
+  UserPlus,
+  Package,
+  Smartphone,
+  Store,
+  HelpCircle,
 } from 'lucide-vue-next'
+import { useDropdownManager } from '../composables/useDropdownManager'
+import { useSearch } from '../composables/useSearch'
+import { useMobileNav } from '../composables/useMobileNav'
+import { useCategories } from '../composables/useCategories'
 
-// Simple dropdown state management
-const moreDropdownOpen = ref(false)
-const userDropdownOpen = ref(false)
-const searchBarOpen = ref(false) // Desktop search
-const mobileSearchOpen = ref(false) // Mobile search
-const showMobileNav = ref(false)
-const spinning = ref(false)
-const currentIcon = ref(Menu)
-const categoriesDropdownOpen = ref(false)
+// Initialize composables
+const { activeDropdown, openDropdown, closeDropdown, isActive } = useDropdownManager()
+const { categories, products, getCategoryIcon, loadCategories } = useCategories()
+const { searchQuery, searchSuggestions, showSuggestions, updateSuggestions, selectSuggestion } = useSearch(products)
+const { mobileSearchOpen, showMobileNav, spinning, currentIcon, toggleMobileSearch, handleIconClick, setShowMobileNav } = useMobileNav()
 
-const categories = ref([])
-const products = ref([])
-const searchQuery = ref("")
-const searchSuggestions = ref([])
-const showSuggestions = ref(false)
-
-const categoryIcons = {
-  'electronics': Monitor,
-  'home & kitchen': Home,
-  'sportswear': Dumbbell,
-  'health & wellness': HeartHandshake,
-  'toys & games': ToyBrick,
-  'office supplies': LampDesk,
-  'fashion': Shirt,
-  'beauty': Sparkles,
-  'sale': BadgePercent,
-  'new arrivals': Star,
-  'bestsellers': Flame,
-  'gifts': Gift,
-  'grocery': ShoppingCart,
-  'home & living': Home,
-  'footwear': Footprints,
-  'home decor': LampDesk,
-  'bags & luggage': Backpack,
-  'sports & outdoors': Dumbbell,
-  'computers & accessories': Cable,
-  'garden & outdoor': Leaf,
-  'books': BookOpen,
-  // Add more as needed
-  default: Tag
-}
-
-function getCategoryIcon(cat) {
-  if (!cat) return categoryIcons.default
-  const key = cat.trim().toLowerCase()
-  return categoryIcons[key] || categoryIcons.default
-}
-
-onMounted(async () => {
-  const response = await fetch('/products.json')
-  const data = await response.json()
-  products.value = data
-  // Count products per category
-  const counts = {}
-  data.forEach(p => {
-    counts[p.category] = (counts[p.category] || 0) + 1
-  })
-  // Sort categories by product count, descending
-  const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1])
-  // Top 7 categories
-  categories.value = sorted.map(([cat]) => cat)
-})
-
-const toggleCategoriesDropdown = () => {
-  categoriesDropdownOpen.value = !categoriesDropdownOpen.value
-}
-
-const closeCategoriesDropdownHandler = () => {
-  categoriesDropdownOpen.value = false
-}
-
-const toggleMoreDropdown = () => {
-  moreDropdownOpen.value = !moreDropdownOpen.value
-  userDropdownOpen.value = false // Close other dropdown
-}
-
-const closeMoreDropdownHandler = () => {
-  moreDropdownOpen.value = false
-}
-
-const toggleUserDropdown = () => {
-  userDropdownOpen.value = !userDropdownOpen.value
-  moreDropdownOpen.value = false // Close other dropdown
-}
-
-const closeUserDropdownHandler = () => {
-  userDropdownOpen.value = false
-}
-
-// Mobile search toggle
-const toggleMobileSearch = () => {
-  mobileSearchOpen.value = !mobileSearchOpen.value
-  // Close mobile nav if open
-  if (mobileSearchOpen.value && showMobileNav.value) {
-    showMobileNav.value = false
-    currentIcon.value = Menu
+// Enhanced dropdown toggle function
+const toggleDropdown = (id) => {
+  if (isActive(id)) {
+    closeDropdown()
+  } else {
+    // Close mobile nav when opening a dropdown
+    if (showMobileNav && (id === 'user' || id === 'more')) {
+      setShowMobileNav(false)
+    }
+    openDropdown(id)
   }
 }
 
-const handleIconClick = () => {
-  spinning.value = true
-  showMobileNav.value = !showMobileNav.value
-  // Close mobile search if open
-  if (showMobileNav.value && mobileSearchOpen.value) {
-    mobileSearchOpen.value = false
+// Close mobile nav when clicking outside
+const closeMobileNav = () => {
+  if (showMobileNav) {
+    setShowMobileNav(false)
   }
-  setTimeout(() => {
-    currentIcon.value = showMobileNav.value ? X : Menu
-    spinning.value = false
-  }, 200)
 }
 
-const updateSuggestions = () => {
-  if (!searchQuery.value.trim()) {
-    searchSuggestions.value = []
-    showSuggestions.value = false
-    return
+// Close dropdowns when mobile nav opens
+const handleMobileNavToggle = (event) => {
+  if (!showMobileNav) {
+    closeDropdown()
   }
-  const query = searchQuery.value.toLowerCase()
-  searchSuggestions.value = products.value.filter(p =>
-    p.name.toLowerCase().includes(query) ||
-    (p.short_description && p.short_description.toLowerCase().includes(query))
-  ).slice(0, 5) // limit to 5 suggestions
-  showSuggestions.value = searchSuggestions.value.length > 0
+  handleIconClick()
 }
 
-const selectSuggestion = (product) => {
-  searchQuery.value = product.name
-  showSuggestions.value = false
-  // Optionally, navigate to the product page here
-}
-
-// Helper to check if a category is 'Sale' or 'New Arrivals'
-const isSpecialCategory = (cat) => {
-  return cat.toLowerCase() === 'sale' || cat.toLowerCase() === 'new arrivals'
-}
-
-const specialBadgeClass = (cat) => {
-  if (cat.toLowerCase() === 'sale') return 'bg-red-500 text-white'
-  if (cat.toLowerCase() === 'new arrivals') return 'bg-blue-500 text-white'
-  return ''
-}
+// Load categories on mount
+onMounted(loadCategories)
 </script>
 
 <style scoped>
