@@ -7,8 +7,10 @@ export default {
       }
     }
     document.addEventListener('click', el.clickOutsideEvent)
+    document.addEventListener('touchstart', el.clickOutsideEvent)
   },
   unmounted(el) {
     document.removeEventListener('click', el.clickOutsideEvent)
+    document.removeEventListener('touchstart', el.clickOutsideEvent)
   }
 }
