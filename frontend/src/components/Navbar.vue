@@ -28,7 +28,7 @@
               leave-active-class="transition duration-150 ease-in" leave-from-class="transform scale-100 opacity-100"
               leave-to-class="transform scale-95 opacity-0">
               <div v-if="isActive('more')"
-                class="absolute left-0 mt-2 w-48 bg-white text-gray-700 rounded-lg shadow-lg z-30 border border-gray-200 overflow-hidden"
+                class="absolute left-0 mt-2 w-48 bg-white text-gray-700 rounded-lg shadow-lg z-50 border border-gray-200 overflow-hidden"
                 role="menu">
                 <div class="py-1">
                   <a href="#"
@@ -93,7 +93,7 @@
   </div>
 
   <!-- Main Navigation -->
-  <header class="bg-white shadow px-4 relative">
+  <header class="bg-white shadow px-4 relative sticky top-0 z-40">
     <div class="container mx-auto py-3 flex items-center justify-between">
       <!-- Logo -->
       <div class="flex items-center gap-2">
@@ -119,14 +119,15 @@
 
             <!-- Categories -->
             <div class="p-3">
-              <div :class="`grid gap-1 grid-cols-${Math.ceil(categories.length / 5)}`">
+              <div class="grid gap-1 grid-cols-[repeat(auto-fill,minmax(10rem,1fr))] max-h-[30rem] overflow-y-auto pr-1">
+
                 <router-link v-for="cat in categories" :key="cat" :to="`/category/${encodeURIComponent(cat)}`"
                   class="flex items-center px-3 py-4 hover:bg-gray-50 text-sm text-gray-700 hover:text-blue-600 transition-colors duration-150 rounded-md group/item">
                   <!-- Category Icon -->
                   <div class="w-5 h-5 flex items-center justify-center mr-2">
                     <component :is="getCategoryIcon(cat)" class="w-4 h-4 text-gray-400" />
                   </div>
-                  <span>{{ cat }}</span>
+                  <span>{{ cat.length > 20 ? cat.slice(0, 15) + '...' : cat }}</span>
                 </router-link>
               </div>
             </div>
@@ -231,7 +232,7 @@
         </div>
 
         <!-- Mobile Burger -->
-        <div @click="handleIconClick" class="md:hidden cursor-pointer p-1">
+        <div @click.stop="handleMobileNavToggle" class="md:hidden cursor-pointer p-1">
           <component :is="currentIcon" :class="{ 'animate-spin': spinning }"
             class="w-5 h-5 text-gray-600 transition-transform duration-200" />
         </div>
@@ -263,7 +264,7 @@
 
     <!-- Mobile Menu -->
     <transition name="slide">
-      <nav v-if="showMobileNav" ref="MobileNavRef"
+      <nav v-if="showMobileNav" ref="MobileNavRef" v-click-outside="closeMobileNav"
         class="absolute top-full left-0 right-0 md:hidden bg-white px-4 pb-4 shadow-lg z-20 border-t">
         <router-link to="/" class="block py-2 text-gray-700 hover:text-blue-600">Home</router-link>
 
@@ -293,34 +294,14 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { onMounted } from 'vue'
 import {
   Globe,
   ChevronDown,
-  Menu, X,
   UserRound,
   ShoppingBasket,
   Heart,
   Search,
-  Tag,
-  Monitor,
-  Home,
-  Shirt,
-  HeartHandshake,
-  Dumbbell,
-  ShoppingCart,
-  Leaf,
-  LampDesk,
-  ToyBrick,
-  Flame,
-  Star,
-  Gift,
-  BadgePercent,
-  Sparkles,
-  Footprints,
-  Backpack,
-  Cable,
-  BookOpen,
   UserPlus,
   Package,
   Smartphone,
@@ -330,99 +311,43 @@ import {
 import { useDropdownManager } from '../composables/useDropdownManager'
 import { logout } from '../utils/auth.js'
 
-
-// Simple dropdown state management
-const { activeDropdown, openDropdown, closeDropdown, isActive } = useDropdownManager()
-const mobileSearchOpen = ref(false)
-const showMobileNav = ref(false)
-const spinning = ref(false)
-const currentIcon = ref(Menu)
-
-const categories = ref([])
-const products = ref([])
-const searchQuery = ref("")
-const searchSuggestions = ref([])
-const showSuggestions = ref(false)
-
-const categoryIcons = {
-  'electronics': Monitor,
-  'home & kitchen': Home,
-  'sportswear': Dumbbell,
-  'health & wellness': HeartHandshake,
-  'toys & games': ToyBrick,
-  'office supplies': LampDesk,
-  'fashion': Shirt,
-  'beauty': Sparkles,
-  'sale': BadgePercent,
-  'new arrivals': Star,
-  'bestsellers': Flame,
-  'gifts': Gift,
-  'grocery': ShoppingCart,
-  'home & living': Home,
-  'footwear': Footprints,
-  'home decor': LampDesk,
-  'bags & luggage': Backpack,
-  'sports & outdoors': Dumbbell,
-  'computers & accessories': Cable,
-  'garden & outdoor': Leaf,
-  'books': BookOpen,
-  default: Tag
-}
-
 const isAthenticated = ref(localStorage.getItem('isAuthenticated') === 'true')
+import { useSearch } from '../composables/useSearch'
+import { useMobileNav } from '../composables/useMobileNav'
+import { useCategories } from '../composables/useCategories'
 
-function getCategoryIcon(cat) {
-  if (!cat) return categoryIcons.default
-  const key = cat.trim().toLowerCase()
-  return categoryIcons[key] || categoryIcons.default
-}
+// Initialize composables
+const { activeDropdown, openDropdown, closeDropdown, isActive } = useDropdownManager()
+const { categories, products, getCategoryIcon, loadCategories } = useCategories()
+const { searchQuery, searchSuggestions, showSuggestions, updateSuggestions, selectSuggestion } = useSearch(products)
+const { mobileSearchOpen, showMobileNav, spinning, currentIcon, toggleMobileSearch, handleIconClick, setShowMobileNav } = useMobileNav()
 
-onMounted(async () => {
-  try {
-    const response = await fetch('/products.json')
-    const data = await response.json()
-    products.value = data
-    const counts = {}
-    data.forEach(p => {
-      counts[p.category] = (counts[p.category] || 0) + 1
-    })
-    const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1])
-    // Top 7 categories
-    categories.value = sorted.map(([cat]) => cat)
-  } catch (error) {
-    console.error('Error loading products:', error)
-  }
-})
-
+// Enhanced dropdown toggle function
 const toggleDropdown = (id) => {
   if (isActive(id)) {
     closeDropdown()
   } else {
+    // Close mobile nav when opening a dropdown
+    if (showMobileNav && (id === 'user' || id === 'more')) {
+      setShowMobileNav(false)
+    }
     openDropdown(id)
   }
 }
 
-// Mobile search toggle
-const toggleMobileSearch = () => {
-  mobileSearchOpen.value = !mobileSearchOpen.value
-  // Close mobile nav if open
-  if (mobileSearchOpen.value && showMobileNav.value) {
-    showMobileNav.value = false
-    currentIcon.value = Menu
+// Close mobile nav when clicking outside
+const closeMobileNav = () => {
+  if (showMobileNav) {
+    setShowMobileNav(false)
   }
 }
 
-const handleIconClick = () => {
-  spinning.value = true
-  showMobileNav.value = !showMobileNav.value
-  // Close mobile search if open
-  if (showMobileNav.value && mobileSearchOpen.value) {
-    mobileSearchOpen.value = false
+// Close dropdowns when mobile nav opens
+const handleMobileNavToggle = (event) => {
+  if (!showMobileNav) {
+    closeDropdown()
   }
-  setTimeout(() => {
-    currentIcon.value = showMobileNav.value ? X : Menu
-    spinning.value = false
-  }, 200)
+  handleIconClick()
 }
 
 const updateSuggestions = () => {
@@ -448,6 +373,8 @@ const updateSuggestions = () => {
     logout()
   }
 
+// Load categories on mount
+onMounted(loadCategories)
 </script>
 
 <style scoped>
