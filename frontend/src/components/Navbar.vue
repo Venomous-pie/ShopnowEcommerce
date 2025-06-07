@@ -55,13 +55,18 @@
 
                 <div class="px-4 py-2">
                   <div class="flex items-center justify-center gap-3">
-                    <a href="#"
+                    <a v-if="!isAuthenticated" href="/register"
                       class="flex-1 text-center text-sm font-medium py-1.5 px-2 rounded-md bg-gray-100 hover:bg-gray-200 transition-colors duration-150">
                       Register
                     </a>
-                    <a href="#"
+                    <a v-if="!isAuthenticated" href="/login"
                       class="flex-1 text-center text-sm font-medium py-1.5 px-2 rounded-md bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors duration-150">
                       Login
+                    </a>
+
+                    <a v-if="isAuthenticated" @submit.prevent="submitLogout"
+                      class="flex-1 text-center text-sm font-medium py-1.5 px-2 rounded-md bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors duration-150">
+                      Logout
                     </a>
                   </div>
                 </div>
@@ -75,9 +80,12 @@
             <a class="hover:text-blue-300">EN</a>
           </div>
           <div class="hidden sm:flex items-center justify-center gap-2">
-            <a href="#" class="text-sm font-medium hover:text-blue-600">Register</a>
-            <span class="text-gray-400">|</span>
-            <a href="#" class="text-sm font-medium hover:text-blue-600">Login</a>
+            <span v-if="!isAthenticated" >
+              <a href="/register" class="text-sm font-medium hover:text-blue-600">Register</a>
+              <span class="text-gray-400">|</span>
+              <a href="/login" class="text-sm font-medium hover:text-blue-600">Login</a>
+            </span>
+            <a v-if="isAthenticated" @click.prevent="submitLogout" href="" class="text-sm font-medium hover:text-blue-600">Logout</a>
           </div>
         </div>
       </div>
@@ -193,13 +201,18 @@
 
               <div class="px-4 py-2">
                 <div class="flex items-center justify-center gap-3 sm:gap-4">
-                  <a href="#"
+                  <a v-if="!isAthenticated" href="/register"
                     class="flex-1 text-center text-sm font-medium py-1.5 px-2 rounded-md bg-gray-100 hover:bg-gray-200 transition-colors duration-150">
                     Register
                   </a>
-                  <a href="#"
+                  <a v-if="!isAthenticated" href="/login"
                     class="flex-1 text-center text-sm font-medium py-1.5 px-2 rounded-md bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors duration-150">
                     Login
+                  </a>
+
+                  <a v-if="isAthenticated" @click.prevent="submitLogout"
+                    class="flex-1 text-center text-sm font-medium py-1.5 px-2 rounded-md bg-gray-100 hover:bg-gray-200 transition-colors duration-150">
+                    Logout
                   </a>
                 </div>
               </div>
@@ -315,6 +328,8 @@ import {
   HelpCircle,
 } from 'lucide-vue-next'
 import { useDropdownManager } from '../composables/useDropdownManager'
+import { logout } from '../utils/auth.js'
+
 
 // Simple dropdown state management
 const { activeDropdown, openDropdown, closeDropdown, isActive } = useDropdownManager()
@@ -353,6 +368,8 @@ const categoryIcons = {
   'books': BookOpen,
   default: Tag
 }
+
+const isAthenticated = ref(localStorage.getItem('isAuthenticated') === 'true')
 
 function getCategoryIcon(cat) {
   if (!cat) return categoryIcons.default
@@ -415,17 +432,22 @@ const updateSuggestions = () => {
     return
   }
   const query = searchQuery.value.toLowerCase()
-  searchSuggestions.value = products.value.filter(p =>
-    p.name.toLowerCase().includes(query) ||
-    (p.short_description && p.short_description.toLowerCase().includes(query))
-  ).slice(0, 5) // limit to 5 suggestions
-  showSuggestions.value = searchSuggestions.value.length > 0
-}
+    searchSuggestions.value = products.value.filter(p =>
+      p.name.toLowerCase().includes(query) ||
+      (p.short_description && p.short_description.toLowerCase().includes(query))
+    ).slice(0, 5) // limit to 5 suggestions
+    showSuggestions.value = searchSuggestions.value.length > 0
+  }
 
-const selectSuggestion = (product) => {
-  searchQuery.value = product.name
-  showSuggestions.value = false
-}
+  const selectSuggestion = (product) => {
+    searchQuery.value = product.name
+    showSuggestions.value = false
+  }
+
+  async function submitLogout() {
+    logout()
+  }
+
 </script>
 
 <style scoped>
