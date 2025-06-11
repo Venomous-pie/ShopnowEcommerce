@@ -294,7 +294,7 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import {
   Globe,
   ChevronDown,
@@ -319,7 +319,7 @@ import { useCategories } from '../composables/useCategories'
 // Initialize composables
 const { activeDropdown, openDropdown, closeDropdown, isActive } = useDropdownManager()
 const { categories, products, getCategoryIcon, loadCategories } = useCategories()
-const { searchQuery, searchSuggestions, showSuggestions, updateSuggestions, selectSuggestion } = useSearch(products)
+// const { searchQuery, searchSuggestions, showSuggestions, updateSuggestions, selectSuggestion } = useSearch(products)
 const { mobileSearchOpen, showMobileNav, spinning, currentIcon, toggleMobileSearch, handleIconClick, setShowMobileNav } = useMobileNav()
 
 // Enhanced dropdown toggle function

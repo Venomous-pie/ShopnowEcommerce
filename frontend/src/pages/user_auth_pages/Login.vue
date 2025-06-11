@@ -16,26 +16,44 @@
     const password = ref('')
 
     async function submitLogin() {
-        const response = await fetch('http://localhost:5173/api/login/', {
-            method: 'POST',
-            headers: {'Content-type': 'application/json'},
-            body: JSON.stringify({
-                username: username.value,
-                password: password.value,
-            }),
-        })
+        try {
+            const response = await fetch('http://localhost:5173/api/login/', {
+                method: 'POST',
+                headers: { 'Content-type': 'application/json' },
+                body: JSON.stringify({
+                    username_email: username.value,
+                    password: password.value,
+                }),
+            });
 
-        const data = await response.json()
+            let data;
+            try {
+                data = await response.json();
+            } catch (err) {
+                console.error('Error parsing JSON:', err);
+                alert('Unexpected server response. Please try again later.');
+                return;
+            }
 
-        if (response.ok) {
-            localStorage.setItem('access', data.access)
-            localStorage.setItem('refresh', data.refresh)
-            localStorage.setItem('isAuthenticated', 'true')
+            if (response.ok) {
+                localStorage.setItem('access', data.access);
+                localStorage.setItem('refresh', data.refresh);
+                localStorage.setItem('isAuthenticated', 'true');
+                window.location.href = '/';
+            } else {
+                if (response.status === 403) {
+                    alert('You’ve made too many login attempts. Please wait a few minutes before trying again.');
+                } else if (response.status === 401) {
+                    alert(data?.error || 'Invalid credentials.');
+                } else {
+                    alert(data?.error || data?.detail || 'Login failed. Please try again.');
+                }
+            }
 
-            window.location.href = '/'
-        } else {
-            console.error(data)
-            alert('Invalid Credentials.')
+        } catch (err) {
+            console.error('Network or server error:', err);
+            alert('Cannot connect to the server. Please check your internet or try again later.');
         }
     }
+
 </script>
