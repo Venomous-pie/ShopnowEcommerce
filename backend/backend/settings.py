@@ -52,6 +52,10 @@ REST_FRAMEWORK = {
     ),
 }
 
+AUTHENTICATION_BACKENDS = [
+    'api.backends.EmailOrUsernameBackend',
+]
+
 # These settings control how long the login tokens stay valid:
 # - Access token: used for normal login, expires after 30 minutes
 # - Refresh token: used to get a new access token, expires after 1 day
