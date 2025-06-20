@@ -17,9 +17,29 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+RECAPTCHA_SECRET_KEY= '6LdCYGMrAAAAAEnpm833ruyEgBcq1s2u8a8Kb4ec'
+
+if DEBUG:
+    # Dev (local)
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+            'LOCATION': 'failed_login_cache',
+        }
+    }
+else:
+    # Ready for Production
+    # NOTE:     Run this command in the web deployment web server (render, etc.)
+    # Command: 'sudo apt install memcached'
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+            'LOCATION': '127.0.0.1:11211',
+        }
+    }
+
 
 # Application definition
-
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
