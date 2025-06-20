@@ -17,6 +17,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+RECAPTCHA_SECRET_KEY= '6LdCYGMrAAAAAEnpm833ruyEgBcq1s2u8a8Kb4ec'
 
 if DEBUG:
     # Dev (local)
