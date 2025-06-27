@@ -24,9 +24,8 @@ def login_user(request):
     if serializer.errors:
         errors = serializer.errors.copy()
 
-        # Flag frontend to trigger captcha if required
-        captcha_errors = errors.get('captcha', [])
-        if any("Too many failed login attempts please verify yourself." in msg for msg in captcha_errors):
+        captcha_errors = errors.get('captcha_error', [])
+        if any("Captcha is required" in err for err in captcha_errors):
             errors['require_captcha'] = True
 
         return Response(errors, status=400)
