@@ -7,11 +7,13 @@ from django.core.cache import cache
 from django.conf import settings
 from rest_framework import serializers
 
+
 logger = logging.getLogger(__name__)
+
 
 def check_captcha(captcha):
     if not captcha or captcha.strip() == '':
-        raise serializers.ValidationError({"captcha": "Captcha is required."})
+        raise serializers.ValidationError({"captcha_error": "Captcha is required."})
     
     url = 'https://www.google.com/recaptcha/api/siteverify'
     data = {
@@ -24,9 +26,11 @@ def check_captcha(captcha):
         result = response.json()
         logger.warning(f"Captcha Validation: {result}")
         if not result.get('success', False):
-            raise serializers.ValidationError({"captcha": "Captcha is invalid. Please try again."})
+            raise serializers.ValidationError({"captcha_error": "Captcha is invalid. Please try again."})
+
     except requests.RequestException:
-        raise serializers.ValidationError({"captcha": "Captcha verification failed. Please try again."})
+        raise serializers.ValidationError({"captcha_error": "Captcha verification failed. Please try again."})
+
 
 class RegisterUser(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
@@ -54,6 +58,7 @@ class RegisterUser(serializers.ModelSerializer):
         validated_data.pop('captcha')
         return User.objects.create_user(**validated_data)
 
+
 class LoginUser(serializers.Serializer):
     username_email = serializers.CharField()
     password = serializers.CharField()
@@ -66,9 +71,16 @@ class LoginUser(serializers.Serializer):
 
         key = f'failed_login:{username_email}'
 
+        login_attempts = cache.get(key, 0)
+        
+        if login_attempts >= 3:
+            check_captcha(captcha)
+
         user = authenticate(username=username_email, password=password)
 
         if not user:
+            login_attempts += 1
+            cache.set(key, login_attempts, timeout=900) # 900 is equivalent to 15 minutes reset time
             raise serializers.ValidationError({
                 "username_email": "Invalid username or password.",
                 "password": "Invalid username or password."
