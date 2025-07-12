@@ -95,7 +95,7 @@ class Product(models.Model):
 
 
 class ProductVariant(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='variants')
+    product = models.ForeignKey('Product', on_delete=models.CASCADE, related_name='variants')
     attributes = models.ManyToManyField(AttributeValue, related_name='variant_attribute')
     price = models.DecimalField(max_digits=10, decimal_places=2)
     sku = models.CharField(max_length=300, unique=True)
@@ -115,12 +115,70 @@ class Review(models.Model):
         return f'{self.user.username} - {self.product.name}'
     
 
-# TODO: 
 class Cart(models.Model):
-    pass
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user',)
+
+
+class CartItem(models.Model):
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='cart_items')
+    product_variant = models.ForeignKey(ProductVariant, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+
+    def total_price(self):
+        return self.product_variant.price * self.quantity
+
+    def __str__(self):
+        return f'{self.cart.user.username} - {self.product_variant.sku} * {self.quantity}'
+
 
 class Wishlist(models.Model):
-    pass
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(ProductVariant, on_delete=models.CASCADE)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'product')
+
+    def __str__(self):
+        return f'{self.user.username}: {self.product.product.name}'
+
 
 class Order(models.Model):
-    pass
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user',)
+
+    def __str__(self):
+        return f'Order: {self.user.username}'
+    
+    @property
+    def total_price(self):
+        return sum(item.total_price() for item in self.orderitem_set.all())
+
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    product = models.ForeignKey(ProductVariant, on_delete=models.CASCADE, related_name='order_items')
+    quantity = models.PositiveIntegerField(default=1)
+
+    def total_price(self):
+        return self.product.price * self.quantity
+    
+
+# TODO: 
+class Address(models.Model):
+    address = models.CharField(max_length=150, null=True, blank=True)
+
+
+class Profile(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    address = models.ForeignKey(Address, on_delete=models.CASCADE)
+
+    created_at = models.DateTimeField(auto_now_add=True)
