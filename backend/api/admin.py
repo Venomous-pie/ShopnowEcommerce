@@ -1,5 +1,11 @@
 from django.contrib import admin
-from .models import *
+from .models import (
+    Attribute, AttributeValue,
+    Category, Tags, Brand,
+    Product, ProductVariant,
+    Review, Cart, CartItem,
+    Wishlist, Order, OrderItem
+)
 
 
 class AttributeValueInline(admin.TabularInline):
@@ -65,3 +71,32 @@ class ReviewAdmin(admin.ModelAdmin):
     list_display = ['user', 'product', 'rating', 'created_at']
     list_filter = ['rating']
     search_fields = ['user__username', 'product__name']
+
+
+@admin.register(Cart)
+class CartAdmin(admin.ModelAdmin):
+    list_display = ['user', 'created_at']
+    search_fields = ['user__username']
+
+
+@admin.register(CartItem)
+class CartItemAdmin(admin.ModelAdmin):
+    list_display = ['cart', 'product_variant', 'quantity']
+
+
+@admin.register(Wishlist)
+class WishlistAdmin(admin.ModelAdmin):
+    list_display = ['user', 'product', 'created_at']
+    search_fields = ['user__username', 'product__sku']
+
+
+@admin.register(Order)
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ['user', 'created_at']
+    search_fields = ['user__username']
+
+
+@admin.register(OrderItem)
+class OrderItemAdmin(admin.ModelAdmin):
+    list_display = ['order', 'product', 'quantity']
+    search_fields = ['order__user__username', 'product__sku']
