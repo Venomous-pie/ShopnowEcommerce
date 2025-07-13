@@ -54,7 +54,7 @@ class ProductVariantInline(admin.TabularInline):
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ['name', 'sku', 'price', 'stock', 'stock_status', 'brand', 'category']
-    list_filter = ['stock_status', 'brand', 'category', 'free_shipping', 'hazardous_material']
+    # list_filter = ['stock_status', 'brand', 'category', 'free_shipping', 'hazardous_material']
     search_fields = ['name', 'sku', 'description']
     inlines = [ProductVariantInline]
 
